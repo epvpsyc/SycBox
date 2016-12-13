@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name        ShoutBox
+// @name        SycBox
 // @namespace   Elitepvpers
 // @description SB
 // @include     *//www.elitepvpers.com/forum/*
