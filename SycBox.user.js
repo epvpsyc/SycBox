@@ -11,7 +11,7 @@
 {
     var chat_history = [];
 
-    initSB(updateChatHistory());
+    initTable();
 
     function updateChatHistory()
     {
@@ -51,7 +51,7 @@
         return chat_history;
     }
 
-    function initSB()
+    function initTable()
     {
         var input = $('#mgc_cb_evo_input');
         var sbWidth = $('tbody#mgc_cb_evo_opened').width();
@@ -60,14 +60,6 @@
         $('tbody#mgc_cb_evo_opened').parent().html('<tbody id="shoutBoxTbody"></tbody>');
         $('#shoutBoxTbody').parent().attr("id", "shoutBoxTable");
 
-        for (var chat in chat_history.reverse())
-        {
-            chat_history[chat]['appended'] = true;
-            chat = chat_history[chat];
-            var line = '<tr><td>' + chat['time'] + '</td><td style="color:' + chat['user']['color'] + ';"><a href="' + chat['user']['url'] + '">' + chat['user']['name'] + '</a></td><td>' + chat['text'] + '</td></tr>';
-            $('#shoutBoxTbody').append(line);
-        };
-
         // $('#shoutBoxTbody').append('<tr><td colspan="3"><input type="text" id="mgc_cb_evo_input" name="mgc_cb_evo_input" tabindex="1"></td></tr>');
         $('#shoutBoxTable').width(sbWidth + 'px');
         $('#shoutBoxTable').width(sbHeight + 'px');
@@ -75,10 +67,13 @@
 
     function appendSB() 
     {
-        $.each(chat_history, function (j, chat)
+        for (var chat in chat_history.reverse())
         {
+            chat = chat_history[chat];
             if (!chat['appended'])
             {
+                chat_history[chat]['appended'] = true;
+                
                 var line = '<tr><td>' + chat['time'] + '</td><td style="color:' + chat['user']['color'] + ';"><a href="' + chat['user']['url'] + '">' + chat['user']['name'] + '</a></td><td>' + chat['text'] + '</td></tr>';
 
                 $('#shoutBoxTbody').append(line);
