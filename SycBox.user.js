@@ -7,3 +7,80 @@
 // @downloadURL https://github.com/epvpsyc/SycBox/raw/master/SycBox.user.js
 // @grant       none
 // ==/UserScript==
+(function ($)
+{
+    var chat_history = [];
+
+    initSB(getChatHistory(chat_history));
+
+    function getChatHistory(chat_history)
+    {
+        var content_table = fetch_tags(refreshAjax.handler.responseXML, 'chatbox_content');
+        chatbox_content = refreshAjax.fetch_data(content_table[0]);
+
+        $(chatbox_content).find('tr.alt2').each(function (i, tr)
+        {
+            var id = $(tr).find('td:first').attr('id').replace('chat_', '');
+
+            if (!(id in chat_history))
+            {
+                var message = {
+                    'id': id,
+                    'time': $(tr).find('.mgc_cb_evo_date').text().trim(),
+                    'user': {
+                        'url': $(tr).find('td:nth-last-child(2) > span > a').attr('href'),
+                        'name': $(tr).find('td:nth-last-child(2) > span > a > span').text(),
+                        'color': $(tr).find('td:nth-last-child(2) > span > a > span').css('color'),
+                    },
+                    'text': $(tr).find('td').last().html().trim(),
+                };
+                chat_history.push(message);
+            }
+        });
+
+        return chat_history;
+    }
+
+    function initSB(chat_history)
+    {
+        var input = $('#mgc_cb_evo_input');
+        var sbWidth = $('tbody#mgc_cb_evo_opened').width();
+
+        $('tbody#mgc_cb_evo_opened').parent().html('<tbody id="shoutBoxTbody"></tbody>');
+        $('#shoutBoxTbody').parent().attr("id", "shoutBoxTable");
+
+        for (var chat in chat_history.reverse())
+        {
+            chat = chat_history[chat];
+
+            console.log(chat['user']['color']);
+
+            var line = '<tr><td>' + chat['time'] + '</td><td style="color:' + chat['user']['color'] + ';">' + chat['user']['name'] + '</td><td>' + chat['text'] + '</td></tr>';
+
+            $('#shoutBoxTbody').append(line);
+        };
+
+        $('#shoutBoxTbody').append('<tr><td colspan="3"><input type="text" id="mgc_cb_evo_input" name="mgc_cb_evo_input" tabindex="1"></td></tr>');
+
+        $('#shoutBoxTable').width(sbWidth + 'px');
+    }
+
+    window.setInterval(function ()
+    {
+        window.clearTimeout(idleTimeout);
+    }, 30000);
+
+    window.setInterval(function ()
+    {
+        var new_chat_history = getChatHistory(chat_history);
+
+        if (chat_history !== new_chat_history)
+        {
+            chat_history = new_chat_history;
+            initSB(new_chat_history);
+        }
+    }, 5000);
+
+    // apply css
+    $("head").append($("<link rel='stylesheet' href='https://github.com/epvpsyc/SycBox/raw/master/SycBox.css' type='text/css' media='screen' />"));
+})(jQuery);
