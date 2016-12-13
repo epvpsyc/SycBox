@@ -11,9 +11,9 @@
 {
     var chat_history = [];
 
-    initSB(getChatHistory(chat_history));
+    initSB(updateChatHistory());
 
-    function getChatHistory(chat_history)
+    function updateChatHistory()
     {
         var content_table = fetch_tags(refreshAjax.handler.responseXML, 'chatbox_content');
         chatbox_content = refreshAjax.fetch_data(content_table[0]);
@@ -21,8 +21,17 @@
         $(chatbox_content).find('tr.alt2').each(function (i, tr)
         {
             var id = $(tr).find('td:first').attr('id').replace('chat_', '');
+            var id_exists = false;
 
-            if (!(id in chat_history))
+            $.each(chat_history, function (j, elem)
+            {
+                if (id in elem)
+                {
+                    id_exists = true;
+                }
+            });
+
+            if (!id_exists)
             {
                 var message = {
                     'id': id,
@@ -33,6 +42,7 @@
                         'color': $(tr).find('td:nth-last-child(2) > span > a > span').css('color'),
                     },
                     'text': $(tr).find('td').last().html().trim(),
+                    'appended': false,
                 };
                 chat_history.push(message);
             }
@@ -41,28 +51,39 @@
         return chat_history;
     }
 
-    function initSB(chat_history)
+    function initSB()
     {
         var input = $('#mgc_cb_evo_input');
         var sbWidth = $('tbody#mgc_cb_evo_opened').width();
+        var sbHeight = $('tbody#mgc_cb_evo_opened').sbHeight();
 
         $('tbody#mgc_cb_evo_opened').parent().html('<tbody id="shoutBoxTbody"></tbody>');
         $('#shoutBoxTbody').parent().attr("id", "shoutBoxTable");
 
         for (var chat in chat_history.reverse())
         {
+            chat_history[chat]['appended'] = true;
             chat = chat_history[chat];
-
-            console.log(chat['user']['color']);
-
-            var line = '<tr><td>' + chat['time'] + '</td><td style="color:' + chat['user']['color'] + ';">' + chat['user']['name'] + '</td><td>' + chat['text'] + '</td></tr>';
-
+            var line = '<tr><td>' + chat['time'] + '</td><td style="color:' + chat['user']['color'] + ';"><a href="' + chat['user']['url'] + '">' + chat['user']['name'] + '</a></td><td>' + chat['text'] + '</td></tr>';
             $('#shoutBoxTbody').append(line);
         };
 
-        $('#shoutBoxTbody').append('<tr><td colspan="3"><input type="text" id="mgc_cb_evo_input" name="mgc_cb_evo_input" tabindex="1"></td></tr>');
-
+        // $('#shoutBoxTbody').append('<tr><td colspan="3"><input type="text" id="mgc_cb_evo_input" name="mgc_cb_evo_input" tabindex="1"></td></tr>');
         $('#shoutBoxTable').width(sbWidth + 'px');
+        $('#shoutBoxTable').width(sbHeight + 'px');
+    }
+
+    function appendSB() 
+    {
+        $.each(chat_history, function (j, chat)
+        {
+            if (!chat['appended'])
+            {
+                var line = '<tr><td>' + chat['time'] + '</td><td style="color:' + chat['user']['color'] + ';"><a href="' + chat['user']['url'] + '">' + chat['user']['name'] + '</a></td><td>' + chat['text'] + '</td></tr>';
+
+                $('#shoutBoxTbody').append(line);
+            }
+        });
     }
 
     window.setInterval(function ()
@@ -72,13 +93,7 @@
 
     window.setInterval(function ()
     {
-        var new_chat_history = getChatHistory(chat_history);
-
-        if (chat_history !== new_chat_history)
-        {
-            chat_history = new_chat_history;
-            initSB(new_chat_history);
-        }
+        updateChatHistory();
     }, 5000);
 
     // apply css
