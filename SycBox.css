@@ -23,6 +23,19 @@
     border: 0;
     height: 10px;
 }
-.shoutBoxTD {
-    underline: none;
+
+.shoutBoxTD > a:link {
+    text-decoration: none;
+}
+
+.shoutBoxTD > a:visited {
+    text-decoration: none;
+}
+
+.shoutBoxTD > a:hover {
+    text-decoration: underline;
+}
+
+.shoutBoxTD > a:active {
+    text-decoration: underline;
 }
