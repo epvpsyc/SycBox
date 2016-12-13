@@ -13,8 +13,9 @@
 
     initTable();
 
-    function updateChatHistory()
+    function updateChatHistory(init)
     {
+        var changes = (init) ? init : false;
         var content_table = fetch_tags(refreshAjax.handler.responseXML, 'chatbox_content');
         chatbox_content = refreshAjax.fetch_data(content_table[0]);
 
@@ -25,7 +26,7 @@
 
             $.each(chat_history, function (j, elem)
             {
-                if (id in elem)
+                if (elem['id'] === id)
                 {
                     id_exists = true;
                 }
@@ -45,10 +46,13 @@
                     'appended': false,
                 };
                 chat_history.push(message);
+                changes = true;
             }
         });
 
-        return chat_history;
+        if (changes) {
+            appendSB();
+        }
     }
 
     function initTable()
@@ -62,20 +66,24 @@
 
         // $('#shoutBoxTbody').append('<tr><td colspan="3"><input type="text" id="mgc_cb_evo_input" name="mgc_cb_evo_input" tabindex="1"></td></tr>');
         $('#shoutBoxTable').width(sbWidth + 'px');
-        $('#shoutBoxTable').width(sbHeight + 'px');
+        $('#shoutBoxTable').css('max-height', sbHeight + 'px');
+        $('#shoutBoxTbody').css('max-height', sbHeight + 'px');
+
+        updateChatHistory(true);
     }
 
     function appendSB() 
     {
         for (var chat in chat_history.reverse())
         {
+            var i = chat;
             chat = chat_history[chat];
+
             if (!chat['appended'])
             {
-                chat_history[chat]['appended'] = true;
-                
-                var line = '<tr><td>' + chat['time'] + '</td><td style="color:' + chat['user']['color'] + ';"><a href="' + chat['user']['url'] + '">' + chat['user']['name'] + '</a></td><td>' + chat['text'] + '</td></tr>';
+                chat_history[i]['appended'] = true;
 
+                var line = '<tr><td>' + chat['time'] + '</td><td><a class="shoutBoxTD" style="color:' + chat['user']['color'] + ';" href="' + chat['user']['url'] + '">' + chat['user']['name'] + '</a></td><td>' + chat['text'] + '</td></tr>';
                 $('#shoutBoxTbody').append(line);
             }
         };
