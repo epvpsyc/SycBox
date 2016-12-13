@@ -5,6 +5,9 @@
     border-collapse: collapse;
     border-spacing: 0;
 }
+#shoutBoxTable::-webkit-scrollbar, #shoutBoxTbody::-webkit-scrollbar { 
+    display: none; 
+}
 #shoutBoxTbody td {
     font-size: 11px;
     padding: 2px;
