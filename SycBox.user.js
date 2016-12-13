@@ -78,7 +78,7 @@
 
                 $('#shoutBoxTbody').append(line);
             }
-        });
+        };
     }
 
     window.setInterval(function ()
