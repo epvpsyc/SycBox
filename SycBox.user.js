@@ -55,7 +55,7 @@
     {
         var input = $('#mgc_cb_evo_input');
         var sbWidth = $('tbody#mgc_cb_evo_opened').width();
-        var sbHeight = $('tbody#mgc_cb_evo_opened').sbHeight();
+        var sbHeight = $('tbody#mgc_cb_evo_opened').height();
 
         $('tbody#mgc_cb_evo_opened').parent().html('<tbody id="shoutBoxTbody"></tbody>');
         $('#shoutBoxTbody').parent().attr("id", "shoutBoxTable");
