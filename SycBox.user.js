@@ -261,7 +261,7 @@
         $('#sycBoxMenu').toggle();
     });
 
-    $('span.sycBoxTime').on('click', function ()
+    $('#sycBoxTbody').on('click', 'span.sycBoxTime', function ()
     {
         // layout:
         // @hh:mm User: 
