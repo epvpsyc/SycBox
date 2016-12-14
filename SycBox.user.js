@@ -143,8 +143,13 @@
 
     function addMemes(text)
     {
+        var fbm = 'https://i.imgur.com/7PHHNrO.png';
+
         var memes = [
-            ['https://i.imgur.com/DUZLFe6.png', ':tfw:'],
+            ['https://i.imgur.com/DUZLFe6.png', ':tfw:', 'that feel when'],
+            [fbm, ':fbm:', 'feels bad man'],
+            [fbm, ':pepe:', 'pepe'],
+            [fbm, ':sadfrog:', 'sad frog'],
         ];
 
         for (i = 0; i < memes.length; i++)
@@ -153,7 +158,7 @@
             var regex = new RegExp(find, 'g');
 
             var imghtml = '<img width="16" height="16" src="' + memes[i][0] +
-                '" border="0" alt="" title="that feel when" class="inlineimg">';
+                '" border="0" alt="" title="' + memes[i][2] + '" class="inlineimg">';
 
             text = text.replace(regex, imghtml);
         }
