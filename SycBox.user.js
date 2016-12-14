@@ -38,6 +38,7 @@
                 var color = ($(tr).find('td:nth-last-child(2) > span > a > span').length) ? $(tr).find('td:nth-last-child(2) > span > a > span').css('color') : 'black';
                 var username = $(tr).find('td:nth-last-child(2) > span > a').text().slice(1, -1);
                 var text = $(tr).find('td').last().html().trim();
+                text = addMemes(text);
 
                 // color = (username === "Syc") ? 'green' : color;
 
@@ -91,6 +92,14 @@
             '</div>'
         ).insertAfter('#sycBoxTable');
 
+        // default javascript trys to access this image every refresh
+        // this hack is supposed to stop flooding the console with errors
+        $(
+            '<div id="mgc_cb_evo_refresh_img">&nbsp;' +
+            '</div>'
+        ).appenTo('body');
+        $('#mgc_cb_evo_refresh_img').hide();
+
         // set sizes for sb
         $('#sycBoxTable').width(sbWidth + 'px');
         $('#sycBoxTable').css('max-height', sbHeight + 'px');
@@ -130,6 +139,25 @@
         chat_history.reverse();
 
         removeSmileys();
+    }
+
+    function addMemes(text) {
+        var memes = [
+            ['https://i.imgur.com/u1M4Stg.gif', ':tfw:'],
+        ];
+
+        for (i = 0; i < memes.length; i++)
+        {
+            var find = smileys[i][1];
+            var regex = new RegExp(find, 'g');
+
+            var imghtml = '<img width="16" height="16" src="' + smileys[i][0] +
+            '" border="0" alt="" title="that feel when" class="inlineimg">';
+
+            text = text.replace(regex, imghtml);
+        }
+
+        return text
     }
 
     function removeSmileys()
