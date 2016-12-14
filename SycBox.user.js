@@ -23,6 +23,8 @@
         var content_table = fetch_tags(refreshAjax.handler.responseXML, 'chatbox_content');
         chatbox_content = refreshAjax.fetch_data(content_table[0]);
 
+        console.info(chatbox_content);
+
         $(chatbox_content).find('tr.alt2').each(function(i, tr) {
             var id = $(tr).find('td:first').attr('id').replace('chat_', '');
 
@@ -75,7 +77,9 @@
         // input 
         $(
             '<div id="sycBoxInputCon">' +
+            '<form action="http://www.elitepvpers.com/forum/mgc_cb_evo.php" method="post" id="mgc_cb_evo_form" onsubmit="return send_chat()">' +
             '<input type="text" id="mgc_cb_evo_input" name="mgc_cb_evo_input" tabindex="1">' +
+            '</form>' + 
             '</div>'
         ).insertAfter('#sycBoxTable');
 
@@ -163,6 +167,7 @@
 
     window.setInterval(function() {
         if (refresh) {
+            chatbox_refresh('forced');
             updateChatHistory();
         }
     }, 5000);
@@ -197,6 +202,7 @@
             padding: 1px; \
             padding-right: 2px; \
             word-wrap: break-word; \
+            vertical-align: top; \
         } \
         #sycBoxTbody tr td:last-child { \
             width: 100%; \
