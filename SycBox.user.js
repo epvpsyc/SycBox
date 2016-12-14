@@ -58,7 +58,7 @@
                 var username = $(tr).find('td:nth-last-child(2) > span > a').text().slice(1, -1);
                 var text = $(tr).find('td').last().html().trim();
 
-                color = (username === "Syc") ? 'green' : color;
+                // color = (username === "Syc") ? 'green' : color;
 
                 var message = {
                     'id': id,
