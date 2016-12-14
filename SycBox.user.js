@@ -16,6 +16,9 @@
 
     var chat_history = [];
 
+    var settings;
+    updateSettings();
+
     initTable();
     initMenu();
 
@@ -26,8 +29,7 @@
     // thanks to Der-Eddy
     function appendStyleRaw(style)
     {
-        if (style)
-        {
+        if (style) {
             $('<style type="text/css">' + style + '</style>').appendTo('head');
         }
     }
@@ -45,12 +47,12 @@
         {
             var id = $(tr).find('td:first').attr('id').replace('chat_', '');
 
-            if (!getMessageById(id))
-            {
+            if (!getMessageById(id)) {
                 var color = ($(tr).find('td:nth-last-child(2) > span > a > span').length) ? $(tr).find('td:nth-last-child(2) > span > a > span').css('color') : 'black';
                 var username = $(tr).find('td:nth-last-child(2) > span > a').text().slice(1, -1);
                 var text = $(tr).find('td').last().html().trim();
-                text = addMemes(text);
+
+                text = (settings.showMemes) ? addMemes(text) : text;
 
                 // color = (username === "Syc") ? 'green' : color;
 
@@ -71,8 +73,7 @@
             }
         });
 
-        if (changes)
-        {
+        if (changes) {
             appendToSB();
             refresh = true;
         }
@@ -121,33 +122,39 @@
 
     function initMenu()
     {
-        // @TODO fix layout
+        var removeSmileysHtml = (settings.removeSmileys) ? 'checked' : '';
+        var showMemesHtml = (settings.showMemes) ? 'checked' : '';
 
-        $(
-            '<div id="sycBoxMenu">' +
+        var menuhtml = '<div id="sycBoxMenu" style="padding: 3px; padding-bottom: 20px;">' +
+            '<div id="sycBoxMenuClose" style="cursor: pointer; position: absolute; right: 0; top: 0; padding-right: 2px;">x</div>' +
             '<label>' +
-            '<input type="checkbox" id="sycBoxMenuSmiley" >' +
-            'revert smileys to text' +
+            '<input type="checkbox" data-sycbox-id="removeSmileys" class="sycBoxSetToggle"' + removeSmileysHtml + '>' +
+            'remove smiley images' +
             '</label>' +
-            '<p>' +
-            'suggestions or problems? Please let me know in the thread.' +
-            '</p>' +
-            'Github | (c) Syc' +
+            '<br />' +
+            '<input type="checkbox" data-sycbox-id="showMemes" class="sycBoxSetToggle"' + showMemesHtml + '>' +
+            'show custom memes' +
+            '</label>' +
+            '<div class="sycBoxMenuFooter" style="left: 0;">' +
+            '<a target="_blank" href="https://github.com/epvpsyc/SycBox/raw/master/SycBox.user.js">Update</a>' +
+            '</div>' +
+            '<div class="sycBoxMenuFooter" style="right: 0;">' +
+            '<a target="_blank" href="https://github.com/epvpsyc/SycBox">Github</a> | &copy;<a target="_blank" href="http://www.elitepvpers.com/forum/members/3409936-syc.html">Syc</a>' +
+            '</div>' +
             '</div>'
-        ).appendTo('body');
+
+        $(menuhtml).appendTo('body');
     }
 
     function appendToSB()
     {
         var appended = false;
 
-        for (var chat in chat_history.reverse())
-        {
+        for (var chat in chat_history.reverse()) {
             var i = chat;
             chat = chat_history[chat];
 
-            if (!chat.appended)
-            {
+            if (!chat.appended) {
                 chat_history[i].appended = true;
 
                 // layout:
@@ -168,15 +175,16 @@
         }
 
         // in the case of a message actually being added to the SB, scroll down
-        if (appended)
-        {
+        if (appended) {
             $('#sycBoxTable').animate({ scrollTop: $('#sycBoxTable').prop('scrollHeight') });
         }
 
         // @TODO: is this needed?
         chat_history.reverse();
 
-        removeSmileys();
+        if (settings.removeSmileys) {
+            removeSmileys();
+        }
     }
 
     function addMemes(text)
@@ -195,8 +203,7 @@
             [fbm, ':sadfrog:', 'sad frog'],
         ];
 
-        for (i = 0; i < memes.length; i++)
-        {
+        for (i = 0; i < memes.length; i++) {
             var find = memes[i][1];
             var regex = new RegExp(find, 'g');
 
@@ -232,8 +239,7 @@
             ['awesome.gif', ':awesome:'],
         ];
 
-        for (i = 0; i < smileys.length; i++)
-        {
+        for (i = 0; i < smileys.length; i++) {
             $("#sycBoxTable img[src$='" + smileys[i][0] + "']").each(function ()
             {
                 $(this).replaceWith(smileys[i][1]);
@@ -247,8 +253,7 @@
 
         $.each(chat_history, function (j, elem)
         {
-            if (elem.id === id)
-            {
+            if (elem.id === id) {
                 message = elem;
             }
         });
@@ -256,9 +261,53 @@
         return message;
     }
 
+    function getStorage(key, value)
+    {
+        var prefix = "sycBox_";
+
+        var storage = (localStorage.getItem(prefix + key));
+
+        if (storage === null) {
+            storage = setStorage(key, true);
+        } else {
+            storage = localStorage.getItem(prefix + key);
+        }
+
+        storage = (storage === 'false') ? false : storage;
+        storage = (storage === 'true') ? true : storage;
+
+        return storage;
+    }
+
+    function setStorage(key, value)
+    {
+        var prefix = "sycBox_";
+        localStorage.setItem(prefix + key, value);
+        return value;
+    }
+
+    function updateSettings()
+    {
+        settings = {
+            'removeSmileys': getStorage('removeSmileys'),
+            'showMemes': getStorage('showMemes'),
+        };
+    }
+
     $('#sycBoxMenuBtn').on('click', function ()
     {
         $('#sycBoxMenu').toggle();
+    });
+
+    $('#sycBoxMenuClose').on('click', function ()
+    {
+        $('#sycBoxMenu').toggle();
+    });
+
+    $('input.sycBoxSetToggle').on('change', function ()
+    {
+        setStorage($(this).attr('data-sycbox-id'), $(this).is(':checked'));
+        updateSettings();
     });
 
     $('#sycBoxTbody').on('click', 'span.sycBoxTime', function ()
@@ -281,8 +330,7 @@
 
     window.setInterval(function ()
     {
-        if (refresh)
-        {
+        if (refresh) {
             updateChatHistory();
         }
     }, 5000);
@@ -342,13 +390,21 @@
         #sycBoxMenu { \
             position: absolute; \
             display: none; \
-            width: 200px; \
+            width: 350px; \
+            min-height: 50px; \
             max-height: 250px; \
             border: 1px solid #CCCCCC; \
             background-color: #EDEDED; \
-            margin-left: -100px; \
+            margin-left: -175px; \
             left: 50%; \
             top: 20%; \
+        } \
+        .sycBoxMenuFooter { \
+            position: absolute; \
+            bottom: 0; \
+            right: 0; \
+            padding: 2px; \
+            font-size: 10px; \
         } \
         a:link.sycBox { \
             text-decoration: none; \
