@@ -92,13 +92,13 @@
             '</div>'
         ).insertAfter('#sycBoxTable');
 
-        // // default javascript trys to access this image every refresh
-        // // this hack is supposed to stop flooding the console with errors
-        // $(
-        //     '<div id="mgc_cb_evo_refresh_img">&nbsp;' +
-        //     '</div>'
-        // ).appendTo('body');
-        // $('#mgc_cb_evo_refresh_img').hide();
+        // default javascript trys to access this image every refresh
+        // this hack is supposed to stop flooding the console with errors
+        $(
+            '<div id="mgc_cb_evo_refresh_img">&nbsp;' +
+            '</div>'
+        ).appendTo('body');
+        $('#mgc_cb_evo_refresh_img').hide();
 
         // set sizes for sb
         $('#sycBoxTable').width(sbWidth + 'px');
@@ -141,9 +141,10 @@
         removeSmileys();
     }
 
-    function addMemes(text) {
+    function addMemes(text)
+    {
         var memes = [
-            ['https://i.imgur.com/u1M4Stg.gif', ':tfw:'],
+            ['https://i.imgur.com/DUZLFe6.png', ':tfw:'],
         ];
 
         for (i = 0; i < memes.length; i++)
@@ -152,12 +153,12 @@
             var regex = new RegExp(find, 'g');
 
             var imghtml = '<img width="16" height="16" src="' + memes[i][0] +
-            '" border="0" alt="" title="that feel when" class="inlineimg">';
+                '" border="0" alt="" title="that feel when" class="inlineimg">';
 
             text = text.replace(regex, imghtml);
         }
 
-        return text
+        return text;
     }
 
     function removeSmileys()
