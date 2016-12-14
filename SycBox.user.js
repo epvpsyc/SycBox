@@ -10,26 +10,6 @@
 (function($) {
     var refresh = false;
     var chat_history = [];
-    var smileys = [
-        ['http://www.elitepvpers.com/forum/images/smilies/smile.gif', ':)'],
-        ['http://www.elitepvpers.com/forum/images/smilies/confused.gif', ':confused:'],
-        ['http://www.elitepvpers.com/forum/images/smilies/rtfm.gif', ':rtfm:'],
-        ['http://www.elitepvpers.com/forum/images/smilies/pimp.gif', ':pimp:'],
-        ['http://www.elitepvpers.com/forum/images/smilies/mofo.gif', ':mofo:'],
-        ['http://www.elitepvpers.com/forum/images/smilies/handsdown.gif', ':handsdown:'],
-        ['http://www.elitepvpers.com/forum/images/smilies/bandit.gif', ':bandit:'],
-        ['http://www.elitepvpers.com/forum/images/smilies/cool.gif', ':cool:'],
-        ['http://www.elitepvpers.com/forum/images/smilies/facepalm.gif', ':facepalm:'],
-        ['http://www.elitepvpers.com/forum/images/smilies/frown.gif', ':('],
-        ['http://www.elitepvpers.com/forum/images/smilies/mad.gif', ':mad:'],
-        ['http://www.elitepvpers.com/forum/images/smilies/tongue.gif', ':p'],
-        ['http://www.elitepvpers.com/forum/images/smilies/wink.gif', ';)'],
-        ['http://www.elitepvpers.com/forum/images/smilies/biggrin.gif', ':D'],
-        ['http://www.elitepvpers.com/forum/images/smilies/redface.gif', ':o'],
-        ['http://www.elitepvpers.com/forum/images/smilies/rolleyes.gif', ':rolleyes:'],
-        ['http://www.elitepvpers.com/forum/images/smilies/eek.gif', ':eek:'],
-        ['http://www.elitepvpers.com/forum/images/smilies/awesome.gif', ':awesome:']
-    ];
 
     initTable();
 
@@ -128,8 +108,29 @@
     }
 
     function removeSmileys() {
+        var smileys = [
+            ['smile.gif', ':)'],
+            ['confused.gif', ':confused:'],
+            ['rtfm.gif', ':rtfm:'],
+            ['pimp.gif', ':pimp:'],
+            ['mofo.gif', ':mofo:'],
+            ['handsdown.gif', ':handsdown:'],
+            ['bandit.gif', ':bandit:'],
+            ['cool.gif', ':cool:'],
+            ['facepalm.gif', ':facepalm:'],
+            ['frown.gif', ':('],
+            ['mad.gif', ':mad:'],
+            ['tongue.gif', ':p'],
+            ['wink.gif', ';)'],
+            ['biggrin.gif', ':D'],
+            ['redface.gif', ':o'],
+            ['rolleyes.gif', ':rolleyes:'],
+            ['eek.gif', ':eek:'],
+            ['awesome.gif', ':awesome:']
+        ];
+
         for (i = 0; i < smileys.length; i++) {
-            $("#sycBoxTable img[src='" + smileys[i][0] + "']").each(function() {
+            $("#sycBoxTable img[src$='" + smileys[i][0] + "']").each(function() {
                 $(this).replaceWith(smileys[i][1]);
             });
         }
