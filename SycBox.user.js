@@ -239,9 +239,6 @@
 
     $('span.sycBoxTime').on('click', function ()
     {
-        console.log('test11');
-        console.log($(this));
-
         var message = getMessageById($(this).attr('data-sycbox-id'));
         var bburl = '@' + message.time +
             ' [URL="' + message.user.url + '"]' +
