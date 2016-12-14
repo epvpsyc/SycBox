@@ -101,6 +101,8 @@
 
     function appendSB()
     {
+        var appended = false;
+
         for (var chat in chat_history.reverse())
         {
             var i = chat;
@@ -111,13 +113,18 @@
                 chat_history[i].appended = true;
 
                 var line = '<tr><td><span title="Add timestamp + user to input" class="sycBoxTime" data-sycbox-id="' + chat.id + '">' +
-                    chat.time + '</span></td>' + 
+                    chat.time + '</span></td>' +
                     '<td><a class="sycBox" style="color:' + chat.user.color + ';" href="' + chat.user.url + '">' +
                     chat.user.name + '</a></td><td>' +
                     chat.text + '</td></tr>';
                 $('#sycBoxTbody').append(line);
-                $('#sycBoxTable').animate({ scrollTop: $('#sycBoxTable').prop('scrollHeight') });
+                appended = true;
             }
+        }
+
+        if (appended)
+        {
+            $('#sycBoxTable').animate({ scrollTop: $('#sycBoxTable').prop('scrollHeight') });
         }
 
         chat_history.reverse();
