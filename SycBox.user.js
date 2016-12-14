@@ -144,10 +144,13 @@
 
     function addMemes(text)
     {
+        var tfw = 'https://i.imgur.com/DUZLFe6.png';
         var fbm = 'https://i.imgur.com/7PHHNrO.png';
 
         var memes = [
-            ['https://i.imgur.com/DUZLFe6.png', ':tfw:', 'that feel when'],
+            [tfw, ':tfw:', 'that feel when'],
+            [tfw, ':thatfeelwhen:', 'that feel when'],
+            [fbm, ':feelsbadman:', 'feels bad man'],
             [fbm, ':fbm:', 'feels bad man'],
             [fbm, ':pepe:', 'pepe'],
             [fbm, ':sadfrog:', 'sad frog'],
