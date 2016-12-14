@@ -78,8 +78,8 @@
         // title
         $(
             '<div id="sycBoxTitle">e*pvp Premium Shoutbox ' +
-            '<span class="thead">[<a href="http://www.elitepvpers.com/forum/mgc_cb_evo.php?do=view_archives&amp;page=1">Archiv</a>]</span>' +
-            '<span class="thead">[<a href="https://github.com/epvpsyc/SycBox">SycBox</a>]</span>' +
+            '<span class="thead">[<a target="_blank" href="http://www.elitepvpers.com/forum/mgc_cb_evo.php?do=view_archives&amp;page=1">Archiv</a>]</span>' +
+            '<span class="thead">[<a target="_blank" href="https://github.com/epvpsyc/SycBox">SycBox</a>]</span>' +
             '</div>'
         ).insertBefore('#sycBoxTable');
 
