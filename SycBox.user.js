@@ -10,11 +10,19 @@
 // ==/UserScript==
 (function ($)
 {
+    // refresh will be false for the beginning
+    // this is supposed to prevent refreshing the SB before the SB is even properly initialized
     var refresh = false;
+
     var chat_history = [];
 
     initTable();
 
+    // adding css style this way
+    // since github did not like the way of splitting the css into a separate file
+    // and loading it from github
+    //
+    // thanks to Der-Eddy
     function appendStyleRaw(style)
     {
         if (style)
@@ -25,6 +33,8 @@
 
     function updateChatHistory(changes)
     {
+        // changes indicates if there is a new message that needs to be added to the SB
+
         var content_table = fetch_tags(refreshAjax.handler.responseXML, 'chatbox_content');
         chatbox_content = refreshAjax.fetch_data(content_table[0]);
 
@@ -62,7 +72,7 @@
 
         if (changes)
         {
-            appendSB();
+            appendToSB();
             refresh = true;
         }
     }
@@ -84,7 +94,7 @@
             '</div>'
         ).insertBefore('#sycBoxTable');
 
-        // input 
+        // input
         $(
             '<div id="sycBoxInputCon">' +
             '<form action="http://www.elitepvpers.com/forum/mgc_cb_evo.php" method="post" id="mgc_cb_evo_form" onsubmit="return send_chat()">' +
@@ -104,12 +114,11 @@
         // set sizes for sb
         $('#sycBoxTable').width(sbWidth + 'px');
         $('#sycBoxTable').css('max-height', sbHeight + 'px');
-        $('#sycBoxTbody').css('max-height', sbHeight + 'px');
 
         updateChatHistory(true);
     }
 
-    function appendSB()
+    function appendToSB()
     {
         var appended = false;
 
@@ -122,21 +131,30 @@
             {
                 chat_history[i].appended = true;
 
-                var line = '<tr><td><span title="Add timestamp + user to input" class="sycBoxTime" data-sycbox-id="' + chat.id + '">' +
-                    chat.time + '</span></td>' +
+                // layout:
+                // date | username | message text
+
+                var line = '<tr>' +
+                    '<td><span title="Add timestamp + user to input" class="sycBoxTime" data-sycbox-id="' + chat.id + '">' +
+                    chat.time +
+                    '</span></td>' +
                     '<td><a class="sycBox" style="color:' + chat.user.color + ';" href="' + chat.user.url + '">' +
-                    chat.user.name + '</a></td><td>' +
-                    chat.text + '</td></tr>';
+                    chat.user.name +
+                    '</a></td>' +
+                    '<td>' + chat.text + '</td>' +
+                    '</tr>';
                 $('#sycBoxTbody').append(line);
                 appended = true;
             }
         }
 
+        // in the case of a message actually being added to the SB, scroll down
         if (appended)
         {
             $('#sycBoxTable').animate({ scrollTop: $('#sycBoxTable').prop('scrollHeight') });
         }
 
+        // TODO: is this needed?
         chat_history.reverse();
 
         removeSmileys();
@@ -144,6 +162,8 @@
 
     function addMemes(text)
     {
+        // TODO: clean this mess up
+
         var tfw = 'https://i.imgur.com/DUZLFe6.png';
         var fbm = 'https://i.imgur.com/7PHHNrO.png';
 
