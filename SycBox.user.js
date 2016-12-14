@@ -92,13 +92,13 @@
             '</div>'
         ).insertAfter('#sycBoxTable');
 
-        // default javascript trys to access this image every refresh
-        // this hack is supposed to stop flooding the console with errors
-        $(
-            '<div id="mgc_cb_evo_refresh_img">&nbsp;' +
-            '</div>'
-        ).appenTo('body');
-        $('#mgc_cb_evo_refresh_img').hide();
+        // // default javascript trys to access this image every refresh
+        // // this hack is supposed to stop flooding the console with errors
+        // $(
+        //     '<div id="mgc_cb_evo_refresh_img">&nbsp;' +
+        //     '</div>'
+        // ).appendTo('body');
+        // $('#mgc_cb_evo_refresh_img').hide();
 
         // set sizes for sb
         $('#sycBoxTable').width(sbWidth + 'px');
@@ -148,10 +148,10 @@
 
         for (i = 0; i < memes.length; i++)
         {
-            var find = smileys[i][1];
+            var find = memes[i][1];
             var regex = new RegExp(find, 'g');
 
-            var imghtml = '<img width="16" height="16" src="' + smileys[i][0] +
+            var imghtml = '<img width="16" height="16" src="' + memes[i][0] +
             '" border="0" alt="" title="that feel when" class="inlineimg">';
 
             text = text.replace(regex, imghtml);
