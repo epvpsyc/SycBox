@@ -4,7 +4,7 @@ Script to customize the default ShoutBox
 
 ## Features
 * no idle
-* tag user onclick
+* mention user
 * smiley removal
 * memes
 
