@@ -7,8 +7,7 @@
 // @downloadURL https://github.com/epvpsyc/SycBox/raw/master/SycBox.user.js
 // @grant       none
 // ==/UserScript==
-(function ($)
-{
+(function($) {
     var refresh = false;
     var chat_history = [];
     var smileys = [
@@ -34,26 +33,20 @@
 
     initTable();
 
-    function appendStyleRaw(style)
-    {
-        if (style)
-        {
+    function appendStyleRaw(style) {
+        if (style) {
             $('<style type="text/css">' + style + '</style>').appendTo('head');
         }
     }
 
-    function updateChatHistory(changes)
-    {
+    function updateChatHistory(changes) {
         var content_table = fetch_tags(refreshAjax.handler.responseXML, 'chatbox_content');
         chatbox_content = refreshAjax.fetch_data(content_table[0]);
 
-        $(chatbox_content).find('tr.alt2').each(function (i, tr)
-        {
+        $(chatbox_content).find('tr.alt2').each(function(i, tr) {
             var id = $(tr).find('td:first').attr('id').replace('chat_', '');
-            var id_exists = (getMessageById(id)) ? true : false;
 
-            if (!id_exists)
-            {
+            if (!getMessageById(id)) {
                 var color = ($(tr).find('td:nth-last-child(2) > span > a > span').length) ? $(tr).find('td:nth-last-child(2) > span > a > span').css('color') : 'black';
                 var username = $(tr).find('td:nth-last-child(2) > span > a').text().slice(1, -1);
                 var text = $(tr).find('td').last().html().trim();
@@ -77,15 +70,13 @@
             }
         });
 
-        if (changes)
-        {
+        if (changes) {
             appendSB();
             refresh = true;
         }
     }
 
-    function initTable()
-    {
+    function initTable() {
         var input = $('#mgc_cb_evo_input');
         var sbWidth = $('tbody#mgc_cb_evo_opened').width();
         var sbHeight = $('tbody#mgc_cb_evo_opened').height();
@@ -116,15 +107,12 @@
         updateChatHistory(true);
     }
 
-    function appendSB()
-    {
-        for (var chat in chat_history.reverse())
-        {
+    function appendSB() {
+        for (var chat in chat_history.reverse()) {
             var i = chat;
             chat = chat_history[chat];
 
-            if (!chat.appended)
-            {
+            if (!chat.appended) {
                 chat_history[i].appended = true;
 
                 var line = '<tr><td><span title="Add timestamp + user to input" class="sycBoxTime" data-sycbox-id="' + chat.id + '">' +
@@ -132,32 +120,26 @@
                     chat.user.name + '</a></td><td>' +
                     chat.text + '</td></tr>';
                 $('#sycBoxTbody').append(line);
-                $("#sycBoxTable").scrollTop($("#sycBoxTable").height());
+                $('#sycBoxTable').animate({ scrollTop: $('#sycBoxTable').prop('scrollHeight') });
             }
         }
 
         removeSmileys();
     }
 
-    function removeSmileys()
-    {
-        for (i = 0; i < smileys.length; i++)
-        {
-            $("#sycBoxTable img[src='" + smileys[i][0] + "']").each(function ()
-            {
+    function removeSmileys() {
+        for (i = 0; i < smileys.length; i++) {
+            $("#sycBoxTable img[src='" + smileys[i][0] + "']").each(function() {
                 $(this).replaceWith(smileys[i][1]);
             });
         }
     }
 
-    function getMessageById(id)
-    {
+    function getMessageById(id) {
         var message = false;
 
-        $.each(chat_history, function (j, elem)
-        {
-            if (elem.id === id)
-            {
+        $.each(chat_history, function(j, elem) {
+            if (elem.id === id) {
                 message = elem;
             }
         });
@@ -165,8 +147,7 @@
         return message;
     }
 
-    $(".sycBoxTime").click(function ()
-    {
+    $(".sycBoxTime").click(function() {
         var message = getMessageById($(this).attr('data-sycbox-id'));
         var bburl = '@' + message.time +
             ' [URL="' + message.user.url + '"]' +
@@ -175,15 +156,12 @@
         $('#mgc_cb_evo_input').val($('#mgc_cb_evo_input').val() + bburl);
     });
 
-    window.setInterval(function ()
-    {
+    window.setInterval(function() {
         window.clearTimeout(idleTimeout);
     }, 30000);
 
-    window.setInterval(function ()
-    {
-        if (refresh)
-        {
+    window.setInterval(function() {
+        if (refresh) {
             updateChatHistory();
         }
     }, 5000);
