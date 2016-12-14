@@ -17,6 +17,7 @@
     var chat_history = [];
 
     initTable();
+    initMenu();
 
     // adding css style this way
     // since github did not like the way of splitting the css into a separate file
@@ -90,7 +91,7 @@
         $(
             '<div id="sycBoxTitle">e*pvp Premium Shoutbox ' +
             '<span class="thead">[<a target="_blank" href="http://www.elitepvpers.com/forum/mgc_cb_evo.php?do=view_archives&amp;page=1">Archiv</a>]</span>' +
-            '<span class="thead">[<a target="_blank" href="https://github.com/epvpsyc/SycBox">SycBox</a>]</span>' +
+            '<span class="thead">[<a id="sycBoxMenuBtn" style="text-decoration: underline; cursor: pointer;">SycBox</a>]</span>' +
             '</div>'
         ).insertBefore('#sycBoxTable');
 
@@ -116,6 +117,24 @@
         $('#sycBoxTable').css('max-height', sbHeight + 'px');
 
         updateChatHistory(true);
+    }
+
+    function initMenu()
+    {
+        // @TODO fix layout
+
+        $(
+            '<div id="sycBoxMenu">' +
+            '<label>' +
+            '<input type="checkbox" id="sycBoxMenuSmiley" >' +
+            'revert smileys to text' +
+            '</label>' +
+            '<p>' +
+            'suggestions or problems? Please let me know in the thread.' +
+            '</p>' +
+            'Github | (c) Syc' +
+            '</div>'
+        ).appendTo('body');
     }
 
     function appendToSB()
@@ -154,7 +173,7 @@
             $('#sycBoxTable').animate({ scrollTop: $('#sycBoxTable').prop('scrollHeight') });
         }
 
-        // TODO: is this needed?
+        // @TODO: is this needed?
         chat_history.reverse();
 
         removeSmileys();
@@ -162,7 +181,7 @@
 
     function addMemes(text)
     {
-        // TODO: clean this mess up
+        // @TODO: clean this mess up
 
         var tfw = 'https://i.imgur.com/DUZLFe6.png';
         var fbm = 'https://i.imgur.com/7PHHNrO.png';
@@ -210,7 +229,7 @@
             ['redface.gif', ':o'],
             ['rolleyes.gif', ':rolleyes:'],
             ['eek.gif', ':eek:'],
-            ['awesome.gif', ':awesome:']
+            ['awesome.gif', ':awesome:'],
         ];
 
         for (i = 0; i < smileys.length; i++)
@@ -237,8 +256,16 @@
         return message;
     }
 
+    $('#sycBoxMenuBtn').on('click', function ()
+    {
+        $('#sycBoxMenu').toggle();
+    });
+
     $('span.sycBoxTime').on('click', function ()
     {
+        // layout:
+        // @hh:mm User: 
+
         var message = getMessageById($(this).attr('data-sycbox-id'));
         var bburl = '@' + message.time +
             ' [URL="' + message.user.url + '"]' +
@@ -311,6 +338,17 @@
         } \
         span.sycBoxTime { \
             cursor: pointer; \
+        } \
+        #sycBoxMenu { \
+            position: absolute; \
+            display: none; \
+            width: 200px; \
+            max-height: 250px; \
+            border: 1px solid #CCCCCC; \
+            background-color: #EDEDED; \
+            margin-left: -100px; \
+            left: 50%; \
+            top: 20%; \
         } \
         a:link.sycBox { \
             text-decoration: none; \
