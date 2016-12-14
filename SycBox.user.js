@@ -125,6 +125,20 @@
         var removeSmileysHtml = (settings.removeSmileys) ? 'checked' : '';
         var showMemesHtml = (settings.showMemes) ? 'checked' : '';
 
+        var memeTableHtml = '<table>'
+        var memes = getMemes();
+
+        for (i = 0; i < memes.length; i++) {
+            var line = '<tr>' +
+                '<td><img width="16" height="16" src="' + memes[i][0] + '" border="0" alt="" title="' + memes[i][2] + '" class="inlineimg"></td>' +
+                '<td>' + memes[i][1] + '</td>' +
+                '</tr>';
+
+            memeTableHtml += line;
+        }
+
+        memeTableHtml += '</table>';
+
         var menuhtml = '<div id="sycBoxMenu" style="padding: 3px; padding-bottom: 20px;">' +
             '<div id="sycBoxMenuClose" style="cursor: pointer; position: absolute; right: 0; top: 0; padding-right: 2px;">x</div>' +
             '<label>' +
@@ -135,6 +149,9 @@
             '<input type="checkbox" data-sycbox-id="showMemes" class="sycBoxSetToggle"' + showMemesHtml + '>' +
             'show custom memes' +
             '</label>' +
+            '<br /><br />' +
+            'Memes:' +
+            memeTableHtml +
             '<div class="sycBoxMenuFooter" style="left: 0;">' +
             '<a target="_blank" href="https://github.com/epvpsyc/SycBox/raw/master/SycBox.user.js">Update</a>' +
             '</div>' +
@@ -189,8 +206,23 @@
 
     function addMemes(text)
     {
-        // @TODO: clean this mess up
+        var memes = getMemes();
 
+        for (i = 0; i < memes.length; i++) {
+            var find = memes[i][1];
+            var regex = new RegExp(find, 'g');
+
+            var imghtml = '<img width="16" height="16" src="' + memes[i][0] +
+                '" border="0" alt="" title="' + memes[i][2] + '" class="inlineimg">';
+
+            text = text.replace(regex, imghtml);
+        }
+
+        return text;
+    }
+
+    function getMemes()
+    {
         var tfw = 'https://i.imgur.com/DUZLFe6.png';
         var fbm = 'https://i.imgur.com/7PHHNrO.png';
         var fgm = 'https://i.imgur.com/yWDk2Xr.png';
@@ -207,17 +239,7 @@
             [fgm, ':feelsgoodman:', 'feels good man'],
         ];
 
-        for (i = 0; i < memes.length; i++) {
-            var find = memes[i][1];
-            var regex = new RegExp(find, 'g');
-
-            var imghtml = '<img width="16" height="16" src="' + memes[i][0] +
-                '" border="0" alt="" title="' + memes[i][2] + '" class="inlineimg">';
-
-            text = text.replace(regex, imghtml);
-        }
-
-        return text;
+        return memes;
     }
 
     function removeSmileys()
