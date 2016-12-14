@@ -125,7 +125,7 @@
         var removeSmileysHtml = (settings.removeSmileys) ? 'checked' : '';
         var showMemesHtml = (settings.showMemes) ? 'checked' : '';
 
-        var memeTableHtml = '<table>'
+        var memeTableHtml = '<table>';
         var memes = getMemes();
 
         for (i = 0; i < memes.length; i++) {
@@ -146,6 +146,7 @@
             'remove smiley images' +
             '</label>' +
             '<br />' +
+            '<label>' +
             '<input type="checkbox" data-sycbox-id="showMemes" class="sycBoxSetToggle"' + showMemesHtml + '>' +
             'show custom memes' +
             '</label>' +
@@ -158,7 +159,7 @@
             '<div class="sycBoxMenuFooter" style="right: 0;">' +
             '<a target="_blank" href="https://github.com/epvpsyc/SycBox">Github</a> | &copy;<a target="_blank" href="http://www.elitepvpers.com/forum/members/3409936-syc.html">Syc</a>' +
             '</div>' +
-            '</div>'
+            '</div>';
 
         $(menuhtml).appendTo('body');
     }
