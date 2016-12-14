@@ -193,6 +193,7 @@
 
         var tfw = 'https://i.imgur.com/DUZLFe6.png';
         var fbm = 'https://i.imgur.com/7PHHNrO.png';
+        var fgm = 'https://i.imgur.com/yWDk2Xr.png';
 
         var memes = [
             [tfw, ':tfw:', 'that feel when'],
@@ -201,6 +202,9 @@
             [fbm, ':fbm:', 'feels bad man'],
             [fbm, ':pepe:', 'pepe'],
             [fbm, ':sadfrog:', 'sad frog'],
+            [fgm, ':fgm:', 'feels good man'],
+            [fgm, ':happyfrog:', 'happy frog'],
+            [fgm, ':feelsgoodman:', 'feels good man'],
         ];
 
         for (i = 0; i < memes.length; i++) {
