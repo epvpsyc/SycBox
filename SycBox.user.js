@@ -111,13 +111,16 @@
                 chat_history[i].appended = true;
 
                 var line = '<tr><td><span title="Add timestamp + user to input" class="sycBoxTime" data-sycbox-id="' + chat.id + '">' +
-                    chat.time + '</span></td><td><a class="sycBox" style="color:' + chat.user.color + ';" href="' + chat.user.url + '">' +
+                    chat.time + '</span></td>' + 
+                    '<td><a class="sycBox" style="color:' + chat.user.color + ';" href="' + chat.user.url + '">' +
                     chat.user.name + '</a></td><td>' +
                     chat.text + '</td></tr>';
                 $('#sycBoxTbody').append(line);
                 $('#sycBoxTable').animate({ scrollTop: $('#sycBoxTable').prop('scrollHeight') });
             }
         }
+
+        chat_history.reverse();
 
         removeSmileys();
     }
