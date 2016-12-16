@@ -365,6 +365,7 @@
             message.user.name + '[/URL] ';
 
         $('#mgc_cb_evo_input').val($('#mgc_cb_evo_input').val() + bburl);
+        $('#mgc_cb_evo_input').focus();
     });
 
     window.setInterval(function ()
