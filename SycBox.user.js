@@ -132,13 +132,22 @@
         var memeTableHtml = '<table>';
         var memes = getMemes();
 
-        for (i = 0; i < memes.length; i++) {
-            var line = '<tr>' +
-                '<td><img width="16" height="16" src="' + memes[i][0] + '" border="0" alt="" title="' + memes[i][2] + '" class="inlineimg"></td>' +
-                '<td>' + memes[i][1] + '</td>' +
-                '</tr>';
+        var line = '';
 
-            memeTableHtml += line;
+        for (i = 0; i < memes.length; i++) {
+            if (i == 0 || memes[i][0] !== memes[i - 1][0]) {
+                line = '<tr><td><img width="16" height="16" src="' + memes[i][0] + '" border="0" class="inlineimg"></td><td>';
+                line += ' '
+            }
+
+            line += memes[i][1];
+
+            if (i === memes.length - 1 || memes[i][0] !== memes[i + 1][0]) {
+                line += '</td></tr>';
+                memeTableHtml += line;
+            } else {
+                line += ' ';
+            }
         }
 
         memeTableHtml += '</table>';
@@ -158,7 +167,6 @@
             'show custom memes' +
             '</label>' +
             '<br /><br />' +
-            'Memes:' +
             memeTableHtml +
             '</div>' +
             '<div class="sycBoxMenuFooter" style="left: 0;">' +
@@ -231,7 +239,7 @@
     {
         var tfw = 'https://i.imgur.com/DUZLFe6.png';
         var fbm = 'https://i.imgur.com/7PHHNrO.png';
-        var fgm = 'https://i.imgur.com/yWDk2Xr.png';
+        var fgm = 'https://i.imgur.com/vtttrG2.png';
 
         var memes = [
             [tfw, ':tfw:', 'that feel when'],
@@ -435,13 +443,13 @@
         #sycBoxMenu { \
             position: absolute; \
             display: none; \
-            width: 350px; \
             min-height: 50px; \
+            width: 350px; \
             border: 1px solid #CCCCCC; \
             background-color: #EDEDED; \
-            margin-left: -175px; \
             left: 50%; \
             top: 20%; \
+            margin-left: -175px; \
         } \
         #sycBoxMenuContent { \
             padding: 3px; \
