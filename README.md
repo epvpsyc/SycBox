@@ -6,7 +6,7 @@ Script to customize the default ShoutBox
 * no idle
 * mention user
 * smiley removal
-* memes
+* memes (request new ones  [here](https://github.com/epvpsyc/SycBox/issues/2))
 
 ## HowTo Install
 
