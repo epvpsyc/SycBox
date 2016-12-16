@@ -10,6 +10,8 @@
 // ==/UserScript==
 (function ($)
 {
+    // I may or may not feel bad for all of this bad code.
+
     // refresh will be false for the beginning
     // this is supposed to prevent refreshing the SB before the SB is even properly initialized
     var refresh = false;
@@ -20,7 +22,6 @@
     updateSettings();
 
     initTable();
-    initMenu();
 
     // adding css style this way
     // since github did not like the way of splitting the css into a separate file
@@ -40,7 +41,6 @@
 
         var content_table = fetch_tags(refreshAjax.handler.responseXML, 'chatbox_content');
         chatbox_content = refreshAjax.fetch_data(content_table[0]);
-
         refreshAjax.send(mgc_cb_evo_jsloc + 'mgc_cb_evo_ajax.php', 'do=ajax_refresh_chat&status=open&channel_id=' + channel_id + '&location=' + cb_location + '&first_load=' + first_load + '&securitytoken=' + SECURITYTOKEN);
 
         $(chatbox_content).find('tr.alt2').each(function (i, tr)
@@ -75,8 +75,9 @@
 
         if (changes) {
             appendToSB();
-            refresh = true;
         }
+
+        refresh = true;
     }
 
     function initTable()
@@ -90,7 +91,7 @@
 
         // title
         $(
-            '<div id="sycBoxTitle">e*pvp Premium Shoutbox ' +
+            '<div class="sycBoxTitle">e*pvp Premium Shoutbox ' +
             '<span class="thead">[<a target="_blank" href="http://www.elitepvpers.com/forum/mgc_cb_evo.php?do=view_archives&amp;page=1">Archiv</a>]</span>' +
             '<span class="thead">[<a id="sycBoxMenuBtn" style="text-decoration: underline; cursor: pointer;">SycBox</a>]</span>' +
             '</div>'
@@ -118,6 +119,7 @@
         $('#sycBoxTable').css('max-height', sbHeight + 'px');
 
         updateChatHistory(true);
+        initMenu();
     }
 
     function initMenu()
@@ -139,8 +141,11 @@
 
         memeTableHtml += '</table>';
 
-        var menuhtml = '<div id="sycBoxMenu" style="padding: 3px; padding-bottom: 20px;">' +
-            '<div id="sycBoxMenuClose" style="cursor: pointer; position: absolute; right: 0; top: 0; padding-right: 2px;">x</div>' +
+        var menuhtml = '<div id="sycBoxMenu">' +
+            '<div class="sycBoxTitle">sycBox Settings' +
+            '<div id="sycBoxMenuClose">x</div>' +
+            '</div>' +
+            '<div id="sycBoxMenuContent">' +
             '<label>' +
             '<input type="checkbox" data-sycbox-id="removeSmileys" class="sycBoxSetToggle"' + removeSmileysHtml + '>' +
             'remove smiley images' +
@@ -153,6 +158,7 @@
             '<br /><br />' +
             'Memes:' +
             memeTableHtml +
+            '</div>' +
             '<div class="sycBoxMenuFooter" style="left: 0;">' +
             '<a target="_blank" href="https://github.com/epvpsyc/SycBox/raw/master/SycBox.user.js">Update</a>' +
             '</div>' +
@@ -321,6 +327,12 @@
         };
     }
 
+    $('#mgc_cb_evo_input').on('submit', function ()
+    {
+        refresh = false;
+        updateChatHistory();
+    });
+
     $('#sycBoxMenuBtn').on('click', function ()
     {
         $('#sycBoxMenu').toggle();
@@ -364,7 +376,7 @@
 
     // apply css
     appendStyleRaw(
-        '#sycBoxTitle { \
+        '.sycBoxTitle { \
             color: white; \
             background: #1c1e20; \
             text-align: center; \
@@ -419,12 +431,25 @@
             display: none; \
             width: 350px; \
             min-height: 50px; \
-            max-height: 250px; \
             border: 1px solid #CCCCCC; \
             background-color: #EDEDED; \
             margin-left: -175px; \
             left: 50%; \
             top: 20%; \
+        } \
+        #sycBoxMenuContent { \
+            padding: 3px; \
+            padding-bottom: 20px; \
+        } \
+        #sycBoxMenuClose { \
+            cursor: pointer; \
+            position: absolute; \
+            right: 0; \
+            top: 0; \
+            padding-right: 4px; \
+            padding-top: 1px; \
+            color: white; \
+            font-size: 14px; \
         } \
         .sycBoxMenuFooter { \
             position: absolute; \
