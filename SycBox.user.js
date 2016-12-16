@@ -9,7 +9,6 @@
 // @updateURL   https://github.com/epvpsyc/SycBox/raw/master/SycBox.user.js
 // @grant       none
 // ==/UserScript==
-/*jshint multistr: true */
 (function ($) {
     // I may or may not feel bad for all of this bad code.
 
@@ -195,6 +194,9 @@
             memeTableHtml +
             '</div>' +
             '<div class="sycBoxMenuFooter">' +
+            '<div id="sycBoxMenuFooterLeft">' +
+            'v' + GM_info['script']['version'] +
+            '</div>' +
             '<a target="_blank" href="http://www.elitepvpers.com/forum/members/3409936-syc.html">Thread</a> | <a target="_blank" href="https://github.com/epvpsyc/SycBox">Github</a> | &copy;<a target="_blank" href="http://www.elitepvpers.com/forum/members/3409936-syc.html">Syc</a>' +
             '</div>' +
             '</div>'
@@ -436,6 +438,11 @@
             padding: 2px; \
             text-align: right; \
             font-size: 10px; \
+        } \
+        .sycBoxMenuFooter > #sycBoxMenuFooterLeft { \
+            position: absolute; \
+            bottom: 0; \
+            text-align: left; \
         } \
         a:link.sycBox { \
             text-decoration: none; \
