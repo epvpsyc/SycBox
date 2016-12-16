@@ -283,8 +283,6 @@
     {
         var message;
 
-        console.log(id);
-
         chat_history.forEach(function (chat)
         {
             if (chat.id === id) {
