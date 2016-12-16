@@ -33,47 +33,61 @@
 
     function updateChatHistory(changes)
     {
-        // changes indicates if there is a new message that needs to be added to the SB
+        // 'changes' will indicate if there is a new message that needs to be added to the SB
 
-        var content_table = fetch_tags(refreshAjax.handler.responseXML, 'chatbox_content');
-        chatbox_content = refreshAjax.fetch_data(content_table[0]);
-        refreshAjax.send(mgc_cb_evo_jsloc + 'mgc_cb_evo_ajax.php', 'do=ajax_refresh_chat&status=open&channel_id=' + channel_id + '&location=' + cb_location + '&first_load=' + first_load + '&securitytoken=' + SECURITYTOKEN);
-
-        $(chatbox_content).find('tr.alt2').each(function (i, tr)
-        {
-            var id = $(tr).find('td:first').attr('id').replace('chat_', '');
-
-            if (!getMessageById(id)) {
-                var color = ($(tr).find('td:nth-last-child(2) > span > a > span').length) ? $(tr).find('td:nth-last-child(2) > span > a > span').css('color') : 'black';
-                var username = $(tr).find('td:nth-last-child(2) > span > a').text().slice(1, -1);
-                var text = $(tr).find('td').last().html().trim();
-
-                text = (settings.showMemes) ? addMemes(text) : text;
-
-                // color = (username === "Syc") ? 'green' : color;
-
-                var message = {
-                    'id': id,
-                    'time': $(tr).find('.mgc_cb_evo_date').text().trim(),
-                    'user': {
-                        'url': $(tr).find('td:nth-last-child(2) > span > a').attr('href'),
-                        'name': username,
-                        'color': color,
-                    },
-                    'text': text,
-                    'appended': false,
-                };
-
-                chat_history.push(message);
-                changes = true;
+        $.ajax({
+            url: '//www.elitepvpers.com/forum/mgc_cb_evo_ajax.php',
+            type: 'POST',
+            dataType: 'xml',
+            data: {
+                'do': 'ajax_refresh_chat',
+                'status': 'open',
+                'channel_id': 0,
+                'location': 'full',
+                'first_load': 1,
+                'securitytoken': SECURITYTOKEN,
+                's': ''
             }
+        }).done(function (data)
+        {
+            data = $.parseHTML($(data).find('chatbox_content').text());
+
+            $(data).find('tr.alt2').each(function (i)
+            {
+                var id = parseInt($(this).find('td:first').attr('id').replace('chat_', ''));
+
+                if (!getMessageById(id)) {
+                    var color = ($(this).find('td:nth-last-child(2) > span > a > span').length) ? $(this).find('td:nth-last-child(2) > span > a > span').css('color') : 'black';
+                    var username = $(this).find('td:nth-last-child(2) > span > a').text().slice(1, -1);
+                    var text = $(this).find('td').last().html().trim();
+
+                    text = (settings.showMemes) ? addMemes(text) : text;
+
+                    // color = (username === "Syc") ? 'green' : color;
+
+                    var message = {
+                        'id': id,
+                        'time': $(this).find('.mgc_cb_evo_date').text().trim(),
+                        'user': {
+                            'url': $(this).find('td:nth-last-child(2) > span > a').attr('href'),
+                            'name': username,
+                            'color': color,
+                        },
+                        'text': text,
+                        'appended': false,
+                    };
+
+                    chat_history.push(message);
+                    changes = true;
+                }
+            });
+
+            if (changes) {
+                appendToSB();
+            }
+
+            refresh = true;
         });
-
-        if (changes) {
-            appendToSB();
-        }
-
-        refresh = true;
     }
 
     function initTable()
@@ -101,14 +115,6 @@
             '</form>' +
             '</div>'
         ).insertAfter('#sycBoxTable');
-
-        // default javascript trys to access this image every refresh
-        // this hack is supposed to stop flooding the console with errors
-        $(
-            '<div id="mgc_cb_evo_refresh_img">&nbsp;' +
-            '</div>'
-        ).appendTo('body');
-        $('#mgc_cb_evo_refresh_img').hide();
 
         // set sizes for sb
         $('#sycBoxTable').width(sbWidth + 'px');
@@ -170,10 +176,8 @@
     {
         var appended = false;
 
-        for (var chat in chat_history.reverse()) {
-            var i = chat;
-            chat = chat_history[chat];
-
+        chat_history.reverse().forEach(function (chat, i)
+        {
             if (!chat.appended) {
                 chat_history[i].appended = true;
 
@@ -181,7 +185,7 @@
                 // date | username | message text
 
                 var line = '<tr>' +
-                    '<td><span title="Add timestamp + user to input" class="sycBoxTime" data-sycbox-id="' + chat.id + '">' +
+                    '<td><span title="Add user to input" class="sycBoxTime" data-sycbox-id="' + chat.id + '">' +
                     chat.time +
                     '</span></td>' +
                     '<td><a class="sycBox" style="color:' + chat.user.color + ';" href="' + chat.user.url + '">' +
@@ -192,15 +196,14 @@
                 $('#sycBoxTbody').append(line);
                 appended = true;
             }
-        }
+        });
+
+        chat_history.reverse();
 
         // in the case of a message actually being added to the SB, scroll down
         if (appended) {
             $('#sycBoxTable').animate({ scrollTop: $('#sycBoxTable').prop('scrollHeight') });
         }
-
-        // @TODO: is this needed?
-        chat_history.reverse();
 
         if (settings.removeSmileys) {
             removeSmileys();
@@ -278,12 +281,14 @@
 
     function getMessageById(id)
     {
-        var message = false;
+        var message;
 
-        $.each(chat_history, function (j, elem)
+        console.log(id);
+
+        chat_history.forEach(function (chat)
         {
-            if (elem.id === id) {
-                message = elem;
+            if (chat.id === id) {
+                message = chat;
             }
         });
 
@@ -350,13 +355,16 @@
 
     $('#sycBoxTbody').on('click', 'span.sycBoxTime', function ()
     {
-        // layout:
-        // @hh:mm User: 
+        var message = getMessageById(parseInt($(this).attr('data-sycbox-id')));
 
-        var message = getMessageById($(this).attr('data-sycbox-id'));
-        var bburl = '@' + message.time +
-            ' [URL="' + message.user.url + '"]' +
-            message.user.name + '[/URL]: ';
+        // old: @hh:mm User: 
+        // var bburl = '@' + message.time +
+        //     ' [URL="' + message.user.url + '"]' +
+        //     message.user.name + '[/URL]: ';
+
+        // new: @User: 
+        var bburl = '@[URL="' + message.user.url + '"]' +
+            message.user.name + '[/URL] ';
 
         $('#mgc_cb_evo_input').val($('#mgc_cb_evo_input').val() + bburl);
     });
