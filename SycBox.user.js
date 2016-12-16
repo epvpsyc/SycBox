@@ -188,7 +188,7 @@
                     '<td><span title="Add user to input" class="sycBoxTime" data-sycbox-id="' + chat.id + '">' +
                     chat.time +
                     '</span></td>' +
-                    '<td><a class="sycBox" style="color:' + chat.user.color + ';" href="' + chat.user.url + '">' +
+                    '<td><a class="sycBox" style="color:' + chat.user.color + ';" target="_blank" href="' + chat.user.url + '">' +
                     chat.user.name +
                     '</a></td>' +
                     '<td>' + chat.text + '</td>' +
