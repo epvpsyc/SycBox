@@ -17,11 +17,7 @@
     var refresh = false;
 
     var chat_history = [];
-
     var settings;
-    updateSettings();
-
-    initTable();
 
     // adding css style this way
     // since github did not like the way of splitting the css into a separate file
@@ -327,6 +323,9 @@
         };
     }
 
+    updateSettings();
+    initTable();
+
     $('#mgc_cb_evo_input').on('submit', function ()
     {
         refresh = false;
@@ -471,4 +470,5 @@
             text-decoration: none; \
         }'
     );
+
 })(jQuery);
