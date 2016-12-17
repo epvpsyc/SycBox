@@ -4,7 +4,7 @@
 // @description customized ShoutBox
 // @include     *//www.elitepvpers.com/forum/
 // @author      Syc
-// @version     1.0.1
+// @version     1.0.2
 // @downloadURL https://github.com/epvpsyc/SycBox/raw/master/SycBox.user.js
 // @updateURL   https://github.com/epvpsyc/SycBox/raw/master/SycBox.user.js
 // @grant       none
@@ -56,6 +56,7 @@
                     var username = $(this).find('td:nth-last-child(2) > span > a').text().slice(1, -1);
                     var text = $(this).find('td').last().html().trim();
 
+                    text = (settings.removeSmileys) ? removeSmileys(text) : text;
                     text = (settings.showMemes) ? addMemes(text) : text;
 
                     var message = {
@@ -145,10 +146,6 @@
         if (appended) {
             $('#sycBoxTable').animate({ scrollTop: $('#sycBoxTable').prop('scrollHeight') });
         }
-
-        if (settings.removeSmileys) {
-            removeSmileys();
-        }
     }
 
     function initMenu() {
@@ -164,7 +161,7 @@
                 line += ' ';
             }
 
-            line += meme[1];
+            line += ':' + meme[1] + ':';
 
             if (i === memes.length - 1 || meme[0] !== memes[i + 1][0]) {
                 line += '</td></tr>';
@@ -205,7 +202,7 @@
 
     function addMemes(text) {
         getMemes().forEach(function (meme, i) {
-            var find = meme[1];
+            var find = ':' + meme[1] + ':';
             var regex = new RegExp(find, 'g');
             var imghtml = '<img width="16" height="16" src="' + meme[0] +
                 '" border="0" alt="" title="' + meme[2] + '" class="inlineimg">';
@@ -220,21 +217,36 @@
         var tfw = 'https://i.imgur.com/DUZLFe6.png';
         var fbm = 'https://i.imgur.com/7PHHNrO.png';
         var fgm = 'https://i.imgur.com/vtttrG2.png';
+        var rr = 'https://i.imgur.com/X5UQuTK.png';
+        var ok = 'https://i.imgur.com/fF8NAMY.png';
+        var like = 'https://i.imgur.com/zqTsXnF.png';
+        var dislike = 'https://i.imgur.com/xzLVTOj.png';
 
         return [
-            [tfw, ':tfw:', 'that feel when'],
-            [tfw, ':thatfeelwhen:', 'that feel when'],
-            [fbm, ':feelsbadman:', 'feels bad man'],
-            [fbm, ':fbm:', 'feels bad man'],
-            [fbm, ':pepe:', 'pepe'],
-            [fbm, ':sadfrog:', 'sad frog'],
-            [fgm, ':fgm:', 'feels good man'],
-            [fgm, ':happyfrog:', 'happy frog'],
-            [fgm, ':feelsgoodman:', 'feels good man'],
+            [tfw, 'tfw', 'that feel when'],
+            [tfw, 'thatfeelwhen', 'that feel when'],
+            [fbm, 'feelsbadman', 'feels bad man'],
+            [fbm, 'fbm', 'feels bad man'],
+            [fbm, 'pepe', 'pepe'],
+            [fbm, 'sadfrog', 'sad frog'],
+            [fgm, 'fgm', 'feels good man'],
+            [fgm, 'happyfrog', 'happy frog'],
+            [fgm, 'feelsgoodman', 'feels good man'],
+            [rr, 'rr', 'Robbie Rotten'],
+            [rr, 'robbierotten', 'Robbie Rotten'],
+            [rr, 'numberone', 'number one'],
+            [ok, 'ok', 'ok'],
+            [ok, 'ok_hand', 'ok hand'],
+            [like, 'like', 'like'],
+            [like, 'thumbsup', 'thumbsup'],
+            [like, '+1', 'thumbsup'],
+            [dislike, 'dislike', 'dislike'],
+            [dislike, 'thumbsdown', 'thumbsdown'],
+            [dislike, '-1', 'thumbsdown'],
         ];
     }
 
-    function removeSmileys() {
+    function removeSmileys(text) {
         var smileys = [
             ['smile.gif', ':)'],
             ['confused.gif', ':confused:'],
@@ -257,10 +269,12 @@
         ];
 
         smileys.forEach(function (smiley, i) {
-            $("#sycBoxTable img[src$='" + smileys[i][0] + "']").each(function () {
-                $(this).replaceWith(smileys[i][1]);
-            });
+            var html = $('<div>').html(text);
+            html.find('img[src$="' + smileys[i][0] + '"]').replaceWith(smileys[i][1]);
+            text = html.html();
         });
+
+        return $(text).html();
     }
 
     function getMessageById(id) {
