@@ -217,10 +217,12 @@
         var tfw = 'https://i.imgur.com/DUZLFe6.png';
         var fbm = 'https://i.imgur.com/7PHHNrO.png';
         var fgm = 'https://i.imgur.com/vtttrG2.png';
+        var ree = 'https://i.imgur.com/9eBZY7p.png';
         var rr = 'https://i.imgur.com/X5UQuTK.png';
         var ok = 'https://i.imgur.com/fF8NAMY.png';
         var like = 'https://i.imgur.com/zqTsXnF.png';
         var dislike = 'https://i.imgur.com/xzLVTOj.png';
+        var syc = 'https://www.elitepvpers.com/forum/customavatars/avatar3409936_66.gif';
 
         return [
             [tfw, 'tfw', 'that feel when'],
@@ -232,6 +234,9 @@
             [fgm, 'fgm', 'feels good man'],
             [fgm, 'happyfrog', 'happy frog'],
             [fgm, 'feelsgoodman', 'feels good man'],
+            [ree, 'angrypepe', 'angry pepe'],
+            [ree, 'angryfrog', 'angry frog'],
+            [ree, 'reeee', 'reeeeeeeeeee'],
             [rr, 'rr', 'Robbie Rotten'],
             [rr, 'robbierotten', 'Robbie Rotten'],
             [rr, 'numberone', 'number one'],
@@ -243,6 +248,7 @@
             [dislike, 'dislike', 'dislike'],
             [dislike, 'thumbsdown', 'thumbsdown'],
             [dislike, '-1', 'thumbsdown'],
+            [syc, 'syc', 'Syc'],
         ];
     }
 
