@@ -55,6 +55,8 @@
                     var color = ($(this).find('td:nth-last-child(2) > span > a > span').length) ? $(this).find('td:nth-last-child(2) > span > a > span').css('color') : 'black';
                     var username = $(this).find('td:nth-last-child(2) > span > a').text().slice(1, -1);
                     var text = $(this).find('td').last().html().trim();
+                    var url = $(this).find('td:nth-last-child(2) > span > a').attr('href');
+                    var userid = parseInt(url.split('/').pop().split('-')[0]);
 
                     text = (settings.removeSmileys) ? removeSmileys(text) : text;
                     text = (settings.showMemes) ? addMemes(text) : text;
@@ -63,7 +65,8 @@
                         'id': id,
                         'time': $(this).find('.mgc_cb_evo_date').text().trim(),
                         'user': {
-                            'url': $(this).find('td:nth-last-child(2) > span > a').attr('href'),
+                            'id': userid,
+                            'url': url,
                             'name': username,
                             'color': color,
                         },
