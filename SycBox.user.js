@@ -222,7 +222,7 @@
         var ok = 'https://i.imgur.com/fF8NAMY.png';
         var like = 'https://i.imgur.com/zqTsXnF.png';
         var dislike = 'https://i.imgur.com/xzLVTOj.png';
-        var syc = 'https://www.elitepvpers.com/forum/customavatars/avatar3409936_66.gif';
+        // var syc = 'https://www.elitepvpers.com/forum/customavatars/avatar3409936_66.gif';
 
         return [
             [tfw, 'tfw', 'that feel when'],
@@ -248,7 +248,6 @@
             [dislike, 'dislike', 'dislike'],
             [dislike, 'thumbsdown', 'thumbsdown'],
             [dislike, '-1', 'thumbsdown'],
-            [syc, 'syc', 'Syc'],
         ];
     }
 
