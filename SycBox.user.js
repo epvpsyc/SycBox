@@ -4,7 +4,7 @@
 // @description customized ShoutBox
 // @include     *//www.elitepvpers.com/forum/
 // @author      Syc
-// @version     1.0.3
+// @version     1.0.4
 // @downloadURL https://github.com/epvpsyc/SycBox/raw/master/SycBox.user.js
 // @updateURL   https://github.com/epvpsyc/SycBox/raw/master/SycBox.user.js
 // @grant       none
@@ -201,13 +201,17 @@
     }
 
     function addMemes(text) {
+        String.prototype.replaceAll = function(search, replacement) {
+            var target = this;
+            return target.split(search).join(replacement);
+        };
+        
         getMemes().forEach(function (meme, i) {
             var find = ':' + meme[1] + ':';
-            var regex = new RegExp(find, 'g');
             var imghtml = '<img width="16" height="16" src="' + meme[0] +
                 '" border="0" alt="" title="' + meme[2] + '" class="inlineimg">';
-
-            text = text.replace(regex, imghtml);
+            
+            text = text.replaceAll(find, imghtml);
         });
 
         return text;
