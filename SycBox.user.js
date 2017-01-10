@@ -53,7 +53,7 @@
 
                 if (!getMessageById(id)) {
                     var color = ($(this).find('td:nth-last-child(2) > span > a > span').length) ? $(this).find('td:nth-last-child(2) > span > a > span').css('color') : 'black';
-                    var username = $(this).find('td:nth-last-child(2) > span > a').html().slice(4, -4);
+                    var username = ($(this).find('td:nth-last-child(2) > span > a > span')) ? $(this).find('td:nth-last-child(2) > span > a > span').html() : $(this).find('td:nth-last-child(2) > span > a').html().slice(1, -1);
                     var text = $(this).find('td').last().html().trim();
                     var url = $(this).find('td:nth-last-child(2) > span > a').attr('href');
                     var userid = parseInt(url.split('/').pop().split('-')[0]);
