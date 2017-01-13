@@ -4,7 +4,7 @@
 // @description customized ShoutBox
 // @include     *//www.elitepvpers.com/forum/
 // @author      Syc
-// @version     1.0.6
+// @version     1.0.7
 // @downloadURL https://github.com/epvpsyc/SycBox/raw/master/SycBox.user.js
 // @updateURL   https://github.com/epvpsyc/SycBox/raw/master/SycBox.user.js
 // @grant       none
@@ -59,7 +59,6 @@
                     var userid = parseInt(url.split('/').pop().split('-')[0]);
 
                     text = (settings.removeSmileys) ? removeSmileys(text) : text;
-                    text = (settings.showMemes) ? addMemes(text) : text;
 
                     var message = {
                         'id': id,
@@ -153,28 +152,7 @@
 
     function initMenu() {
         var removeSmileysHtml = (settings.removeSmileys) ? 'checked' : '';
-        var showMemesHtml = (settings.showMemes) ? 'checked' : '';
-        var memeTableHtml = '<table>';
-        var memes = getMemes();
         var line;
-
-        memes.forEach(function (meme, i) {
-            if (i === 0 || meme[0] !== memes[i - 1][0]) {
-                line = '<tr><td><img width="16" height="16" src="' + meme[0] + '" border="0" class="inlineimg"></td><td>';
-                line += ' ';
-            }
-
-            line += ':' + meme[1] + ':';
-
-            if (i === memes.length - 1 || meme[0] !== memes[i + 1][0]) {
-                line += '</td></tr>';
-                memeTableHtml += line;
-            } else {
-                line += ' ';
-            }
-        });
-
-        memeTableHtml += '</table>';
 
         $(
             '<div id="sycBoxMenu">' +
@@ -186,12 +164,6 @@
             '<input type="checkbox" data-sycbox-id="removeSmileys" class="sycBoxSetToggle"' + removeSmileysHtml + '>' +
             'remove smiley images' +
             '</label>' +
-            '<label>' +
-            '<input type="checkbox" data-sycbox-id="showMemes" class="sycBoxSetToggle"' + showMemesHtml + '>' +
-            'show custom memes' +
-            '</label>' +
-            '<br />' +
-            memeTableHtml +
             '</div>' +
             '<div class="sycBoxMenuFooter">' +
             '<div id="sycBoxMenuFooterLeft">' +
@@ -201,61 +173,6 @@
             '</div>' +
             '</div>'
         ).appendTo('body');
-    }
-
-    function addMemes(text) {
-        String.prototype.replaceAll = function(search, replacement) {
-            var target = this;
-            return target.split(search).join(replacement);
-        };
-        
-        getMemes().forEach(function (meme, i) {
-            var find = ':' + meme[1] + ':';
-            var imghtml = '<img width="16" height="16" src="' + meme[0] +
-                '" border="0" alt="" title="' + meme[2] + '" class="inlineimg">';
-            
-            text = text.replaceAll(find, imghtml);
-        });
-
-        return text;
-    }
-
-    function getMemes() {
-        var tfw = 'https://i.imgur.com/DUZLFe6.png';
-        var fbm = 'https://i.imgur.com/7PHHNrO.png';
-        var fgm = 'https://i.imgur.com/vtttrG2.png';
-        var ree = 'https://i.imgur.com/9eBZY7p.png';
-        var rr = 'https://i.imgur.com/X5UQuTK.png';
-        var ok = 'https://i.imgur.com/fF8NAMY.png';
-        var like = 'https://i.imgur.com/zqTsXnF.png';
-        var dislike = 'https://i.imgur.com/xzLVTOj.png';
-        // var syc = 'https://www.elitepvpers.com/forum/customavatars/avatar3409936_66.gif';
-
-        return [
-            [tfw, 'tfw', 'that feel when'],
-            [tfw, 'thatfeelwhen', 'that feel when'],
-            [fbm, 'feelsbadman', 'feels bad man'],
-            [fbm, 'fbm', 'feels bad man'],
-            [fbm, 'pepe', 'pepe'],
-            [fbm, 'sadfrog', 'sad frog'],
-            [fgm, 'fgm', 'feels good man'],
-            [fgm, 'happyfrog', 'happy frog'],
-            [fgm, 'feelsgoodman', 'feels good man'],
-            [ree, 'angrypepe', 'angry pepe'],
-            [ree, 'angryfrog', 'angry frog'],
-            [ree, 'reeee', 'reeeeeeeeeee'],
-            [rr, 'rr', 'Robbie Rotten'],
-            [rr, 'robbierotten', 'Robbie Rotten'],
-            [rr, 'numberone', 'number one'],
-            [ok, 'ok', 'ok'],
-            [ok, 'ok_hand', 'ok hand'],
-            [like, 'like', 'like'],
-            [like, 'thumbsup', 'thumbsup'],
-            [like, '+1', 'thumbsup'],
-            [dislike, 'dislike', 'dislike'],
-            [dislike, 'thumbsdown', 'thumbsdown'],
-            [dislike, '-1', 'thumbsdown'],
-        ];
     }
 
     function removeSmileys(text) {
@@ -327,7 +244,6 @@
     function updateSettings() {
         settings = {
             'removeSmileys': getStorage('removeSmileys'),
-            'showMemes': getStorage('showMemes'),
         };
     }
 
