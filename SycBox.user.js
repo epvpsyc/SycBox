@@ -4,20 +4,18 @@
 // @description customized ShoutBox
 // @include     *//www.elitepvpers.com/forum/
 // @author      Syc
-// @version     1.0.7
+// @version     1.0.8
 // @downloadURL https://github.com/epvpsyc/SycBox/raw/master/SycBox.user.js
 // @updateURL   https://github.com/epvpsyc/SycBox/raw/master/SycBox.user.js
 // @grant       none
 // ==/UserScript==
 (function ($) {
-    // I may or may not feel bad for all of this bad code.
-
     // refreshActive will be false for the beginning
     // this is supposed to prevent refreshing the SB before the SB is even properly initialized
-    var refreshActive = false;
+    let refreshActive = false;
 
-    var chatHistory = [];
-    var settings;
+    let chatHistory = [];
+    let settings;
 
     // adding css style this way
     // since github did not like the way of splitting the css into a separate file
@@ -31,8 +29,9 @@
     }
 
     function updateChatHistory(changes) {
-        // 'changes' will indicate if there is a new message that needs to be added to the SB
+        refreshActive = false;
 
+        // 'changes' will indicate if there is a new message that needs to be added to the SB
         $.ajax({
             url: '//www.elitepvpers.com/forum/mgc_cb_evo_ajax.php',
             type: 'POST',
@@ -40,7 +39,7 @@
             data: {
                 'do': 'ajax_refresh_chat',
                 'status': 'open',
-                'channel_id': 0,
+                'channel_id': (settings.useEnglishChannel ? 1 : 0),
                 'location': 'full',
                 'first_load': 1,
                 'securitytoken': SECURITYTOKEN,
@@ -48,19 +47,19 @@
         }).done(function (data) {
             data = $.parseHTML($(data).find('chatbox_content').text());
 
-            $(data).find('tr.alt2').each(function (i) {
-                var id = parseInt($(this).find('td:first').attr('id').replace('chat_', ''));
+            $(data).find('tr.alt2').each(function () {
+                let id = parseInt($(this).find('td:first').attr('id').replace('chat_', ''));
 
                 if (!getMessageById(id)) {
-                    var color = ($(this).find('td:nth-last-child(2) > span > a > span').length) ? $(this).find('td:nth-last-child(2) > span > a > span').css('color') : 'black';
-                    var username = ($(this).find('td:nth-last-child(2) > span > a > span').length) ? $(this).find('td:nth-last-child(2) > span > a > span').html() : $(this).find('td:nth-last-child(2) > span > a').text().slice(1, -1);
-                    var text = $(this).find('td').last().html().trim();
-                    var url = $(this).find('td:nth-last-child(2) > span > a').attr('href');
-                    var userid = parseInt(url.split('/').pop().split('-')[0]);
+                    let color = ($(this).find('td:nth-last-child(2) > span > a > span').length) ? $(this).find('td:nth-last-child(2) > span > a > span').css('color') : 'black';
+                    let username = ($(this).find('td:nth-last-child(2) > span > a > span').length) ? $(this).find('td:nth-last-child(2) > span > a > span').html() : $(this).find('td:nth-last-child(2) > span > a').text().slice(1, -1);
+                    let text = $(this).find('td').last().html().trim();
+                    let url = $(this).find('td:nth-last-child(2) > span > a').attr('href');
+                    let userid = parseInt(url.split('/').pop().split('-')[0]);
 
                     text = (settings.removeSmileys) ? removeSmileys(text) : text;
 
-                    var message = {
+                    let message = {
                         'id': id,
                         'time': $(this).find('.mgc_cb_evo_date').text().trim(),
                         'user': {
@@ -87,11 +86,11 @@
     }
 
     function initTable() {
-        var sbWidth = $('tbody#mgc_cb_evo_opened').width();
-        var sbHeight = $('tbody#mgc_cb_evo_opened').height();
+        let sbWidth = $('tbody#mgc_cb_evo_opened').width();
+        let sbHeight = $('tbody#mgc_cb_evo_opened').height();
 
         $('tbody#mgc_cb_evo_opened').parent().html('<tbody id="sycBoxTbody"></tbody>');
-        $('#sycBoxTbody').parent().attr("id", "sycBoxTable");
+        $('#sycBoxTbody').parent().attr('id', 'sycBoxTable');
 
         // title
         $(
@@ -104,9 +103,7 @@
         // input
         $(
             '<div id="sycBoxInputCon">' +
-            '<form action="//www.elitepvpers.com/forum/mgc_cb_evo.php" method="post" id="mgc_cb_evo_form" onsubmit="return send_chat()">' +
-            '<input type="text" id="mgc_cb_evo_input" name="mgc_cb_evo_input" tabindex="1">' +
-            '</form>' +
+            '<input type="text" id="sycBoxSend" tabindex="1">' +
             '</div>'
         ).insertAfter('#sycBoxTable');
 
@@ -119,7 +116,7 @@
     }
 
     function appendToSB() {
-        var appended = false;
+        let appended = false;
 
         chatHistory.reverse().forEach(function (chat, i) {
             if (!chat.appended) {
@@ -128,7 +125,7 @@
                 // layout:
                 // date | username | message text
 
-                var line = '<tr>' +
+                let line = '<tr>' +
                     '<td><span title="Add user to input" class="sycBoxTime" data-sycbox-id="' + chat.id + '">' +
                     chat.time +
                     '</span></td>' +
@@ -150,9 +147,16 @@
         }
     }
 
+    function clearSB() {
+        chatHistory = [];
+        $('#sycBoxTbody tr').remove();
+
+        updateChatHistory(true);
+    }
+
     function initMenu() {
-        var removeSmileysHtml = (settings.removeSmileys) ? 'checked' : '';
-        var line;
+        let removeSmileysHtml = (settings.removeSmileys) ? 'checked' : '';
+        let useEnglishChannelHtml = (settings.useEnglishChannel) ? 'checked' : '';
 
         $(
             '<div id="sycBoxMenu">' +
@@ -164,19 +168,23 @@
             '<input type="checkbox" data-sycbox-id="removeSmileys" class="sycBoxSetToggle"' + removeSmileysHtml + '>' +
             'remove smiley images' +
             '</label>' +
+            '<label>' +
+            '<input type="checkbox" data-sycbox-id="useEnglishChannel" class="sycBoxSetToggle"' + useEnglishChannelHtml + '>' +
+            'use english channel' +
+            '</label>' +
             '</div>' +
             '<div class="sycBoxMenuFooter">' +
             '<div id="sycBoxMenuFooterLeft">' +
             'v' + GM_info['script']['version'] +
             '</div>' +
-            '<a target="_blank" href="http://www.elitepvpers.com/forum/members/3409936-syc.html">Thread</a> | <a target="_blank" href="https://github.com/epvpsyc/SycBox">Github</a> | &copy;<a target="_blank" href="http://www.elitepvpers.com/forum/members/3409936-syc.html">Syc</a>' +
+            '<a target="_blank" href="https://github.com/epvpsyc/SycBox">Github</a> | &copy;<a target="_blank" href="http://www.elitepvpers.com/forum/members/3409936-syc.html">Syc</a>' +
             '</div>' +
             '</div>'
         ).appendTo('body');
     }
 
     function removeSmileys(text) {
-        var smileys = [
+        let smileys = [
             ['smile.gif', ':)'],
             ['confused.gif', ':confused:'],
             ['rtfm.gif', ':rtfm:'],
@@ -198,7 +206,7 @@
         ];
 
         smileys.forEach(function (smiley, i) {
-            var html = $('<div>').html(text);
+            let html = $('<div>').html(text);
             html.find('img[src$="' + smileys[i][0] + '"]').replaceWith(smileys[i][1]);
             text = html.html();
         });
@@ -207,7 +215,7 @@
     }
 
     function getMessageById(id) {
-        var message;
+        let message = undefined;
 
         chatHistory.forEach(function (chat) {
             if (chat.id === id) {
@@ -218,13 +226,28 @@
         return message;
     }
 
-    function getStorage(key, value) {
-        var prefix = "sycBox_";
+    function sendMessage(message) {
+        refreshActive = false;
+        let channelID = (settings.useEnglishChannel ? 1 : 0);
 
-        var storage = (localStorage.getItem(prefix + key));
+        let sendAjax = new vB_AJAX_Handler(true);
+        sendAjax.send('//www.elitepvpers.com/forum/mgc_cb_evo_ajax.php', 'do=ajax_chat&channel_id=' + channelID + '&chat=' + PHP.urlencode(message) + '&securitytoken=' + SECURITYTOKEN);
+        setTimeout(function() {
+            updateChatHistory();
+        }, 1000);
+    }
+
+    function getStorage(key) {
+        const settingsDefault = {
+            'removeSmileys': true,
+            'useEnglishChannel': false,
+        };
+
+        let prefix = "sycBox_";
+        let storage = (localStorage.getItem(prefix + key));
 
         if (storage === null) {
-            storage = setStorage(key, true);
+            storage = setStorage(key, settingsDefault[key]);
         } else {
             storage = localStorage.getItem(prefix + key);
         }
@@ -236,7 +259,7 @@
     }
 
     function setStorage(key, value) {
-        var prefix = "sycBox_";
+        let prefix = "sycBox_";
         localStorage.setItem(prefix + key, value);
         return value;
     }
@@ -244,15 +267,19 @@
     function updateSettings() {
         settings = {
             'removeSmileys': getStorage('removeSmileys'),
+            'useEnglishChannel': getStorage('useEnglishChannel'),
         };
     }
 
     updateSettings();
     initTable();
 
-    $('#mgc_cb_evo_input').on('submit', function () {
-        refreshActive = false;
-        updateChatHistory();
+    $('#sycBoxSend').keypress(function (e) {
+        let key = e.which;
+        if (key === 13) {
+            sendMessage($(this).val());
+            $(this).val('');
+        }
     });
 
     $('#sycBoxMenuBtn').on('click', function () {
@@ -266,15 +293,20 @@
     $('input.sycBoxSetToggle').on('change', function () {
         setStorage($(this).attr('data-sycbox-id'), $(this).is(':checked'));
         updateSettings();
+
+        if ($(this).attr('data-sycbox-id') === 'useEnglishChannel') {
+            clearSB();
+        }
     });
 
     $('#sycBoxTbody').on('click', 'span.sycBoxTime', function () {
-        var message = getMessageById(parseInt($(this).attr('data-sycbox-id')));
-        var bburl = '@[URL="' + message.user.url + '"]' +
+        let message = getMessageById(parseInt($(this).attr('data-sycbox-id')));
+        let bburl = '@[URL="' + message.user.url + '"]' +
             message.user.name + '[/URL] ';
 
-        $('#mgc_cb_evo_input').val($('#mgc_cb_evo_input').val() + bburl);
-        $('#mgc_cb_evo_input').focus();
+        let $input = $('#mgc_cb_evo_input');
+        $input.val($input.val() + bburl);
+        $input.focus();
     });
 
     window.setInterval(function () {
@@ -320,7 +352,7 @@
             word-wrap: break-word; \
             white-space: normal; \
         } \
-        #mgc_cb_evo_input { \
+        #sycBoxSend { \
             height: 15px; \
             width: 100%; \
             margin-right: -3px; \
@@ -399,5 +431,4 @@
             text-decoration: none; \
         }'
     );
-
 })(jQuery);
