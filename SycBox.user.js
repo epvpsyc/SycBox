@@ -88,18 +88,18 @@
 
     function initTable() {
         let $oldSB = $('tbody#mgc_cb_evo_opened');
-        let $sycBoxTable = $('#sycBoxTable');
         let sbWidth = $oldSB.width();
         let sbHeight = $oldSB.height();
 
         $oldSB.parent().html('<tbody id="sycBoxTbody"></tbody>');
         $('#sycBoxTbody').parent().attr('id', 'sycBoxTable');
+        let $sycBoxTable = $('#sycBoxTable');
 
         // title
         $sycBoxTable.before(
             '<div class="sycBoxTitle">e*pvp Premium Shoutbox ' +
             '<span class="thead">[<a target="_blank" href="//www.elitepvpers.com/forum/mgc_cb_evo.php?do=view_archives&amp;page=1">Archiv</a>]</span>' +
-            '<span class="thead">[<a id="sycBoxMenuBtn" style="text-decoration: underline; cursor: pointer;">SycBox</a>]</span>' +
+            '<span class="thead">[<a id="sycBoxMenuBtn">SycBox</a>]</span>' +
             '</div>'
         );
 
@@ -127,7 +127,7 @@
 
                 // layout:
                 // date | username | message text
-                // 13:37 Syc This is an example message
+                // 13:37 Syc this is an example message
 
                 let line = '<tr>' +
                     '<td><span title="Add user to input" class="sycBoxTime" data-sycbox-id="' + chat.id + '">' +
@@ -328,114 +328,118 @@
 
     // apply css
     appendStyleRaw(
-        '.sycBoxTitle { \
-            padding: 4px; \
-            color: white; \
-            background: #1c1e20; \
-            text-align: center; \
-            font: bold 11px tahoma,verdana,geneva,lucida,arial,helvetica,sans-serif; \
-        } \
-        #sycBoxTable { \
-            padding: 2px; \
-            border: 1px solid #CCCCCC; \
-            background-color: #EDEDED; \
-            border-collapse: collapse; \
-            border-spacing: 0; \
-            display: block; \
-            table-layout: fixed; \
-            overflow: auto; \
-        } \
-        #sycBoxTbody { \
-            width: 100%; \
-        } \
-        #sycBoxTbody td { \
-            padding: 1px 2px 1px 2px; \
-            vertical-align: top; \
-            white-space: nowrap; \
-            font-size: 11px; \
-        } \
-        #sycBoxTbody tr td:last-child { \
-            width: 100%; \
-            word-wrap: break-word; \
-            white-space: normal; \
-        } \
-        #sycBoxSend { \
-            height: 15px; \
-            width: 100%; \
-            margin-right: -3px; \
-            padding: 0 2px 0 2px; \
-            border: 1px solid #CCCCCC; \
-            border-top: 0; \
-            font-size: 11px; \
-            box-sizing: border-box; \
-            -moz-box-sizing: border-box; \
-        } \
-        span.sycBoxTime { \
-            cursor: pointer; \
-        } \
-        #sycBoxMenu { \
-            position: absolute; \
-            top: 20%; \
-            left: 50%; \
-            min-height: 50px; \
-            width: 350px; \
-            margin-left: -175px; \
-            display: none; \
-            border: 1px solid #CCCCCC; \
-            background-color: #EDEDED; \
-        } \
-        #sycBoxMenuContent { \
-            padding: 3px 3px 15px 3px; \
-        } \
-        #sycBoxMenuContent > label { \
-            display: block; \
-            padding: 0 0 3px 4px; \
-        } \
-        input[type="checkbox"].sycBoxSetToggle { \
-            position: relative; \
-            top: -1px; \
-            width: 13px; \
-            height: 13px; \
-            margin:0; \
-            margin-right: 3px; \
-            padding: 0; \
-            vertical-align: bottom; \
-            *overflow: hidden; \
-        } \
-        #sycBoxMenuClose { \
-            position: absolute; \
-            top: 0; \
-            right: 0; \
-            padding: 1px 4px 0 0; \
-            color: white; \
-            font-size: 14px; \
-            cursor: pointer; \
-        } \
-        .sycBoxMenuFooter { \
-            position: absolute; \
-            left: 0; \
-            right: 0; \
-            bottom: 0; \
-            padding: 2px; \
-            text-align: right; \
-            font-size: 10px; \
-        } \
-        .sycBoxMenuFooter > #sycBoxMenuFooterLeft { \
-            position: absolute; \
-            bottom: 0; \
-            text-align: left; \
-        } \
-        a:link.sycBox { \
-            text-decoration: none; \
-        } \
-        a:visited.sycBox { \
-            text-decoration: none; \
-        } \
-        a:hover.sycBox { \
-            text-decoration: none; \
-        } \
-        a:active.sycBox { \
-            text-decoration: none; \
+        '.sycBoxTitle {\
+            padding: 4px;\
+            color: white;\
+            background: #1c1e20;\
+            text-align: center;\
+            font: bold 11px tahoma,verdana,geneva,lucida,arial,helvetica,sans-serif;\
+        }\
+        .sycBoxTitle > span {\
+            text-decoration: underline;\
+            cursor: pointer;\
+        }\
+        #sycBoxTable {\
+            padding: 2px;\
+            border: 1px solid #CCCCCC;\
+            background-color: #EDEDED;\
+            border-collapse: collapse;\
+            border-spacing: 0;\
+            display: block;\
+            table-layout: fixed;\
+            overflow: auto;\
+        }\
+        #sycBoxTbody {\
+            width: 100%;\
+        }\
+        #sycBoxTbody td {\
+            padding: 1px 2px 1px 2px;\
+            vertical-align: top;\
+            white-space: nowrap;\
+            font-size: 11px;\
+        }\
+        #sycBoxTbody tr td:last-child {\
+            width: 100%;\
+            word-wrap: break-word;\
+            white-space: normal;\
+        }\
+        #sycBoxSend {\
+            height: 15px;\
+            width: 100%;\
+            margin-right: -3px;\
+            padding: 0 2px 0 2px;\
+            border: 1px solid #CCCCCC;\
+            border-top: 0;\
+            font-size: 11px;\
+            box-sizing: border-box;\
+            -moz-box-sizing: border-box;\
+        }\
+        span.sycBoxTime {\
+            cursor: pointer;\
+        }\
+        #sycBoxMenu {\
+            position: absolute;\
+            top: 20%;\
+            left: 50%;\
+            min-height: 50px;\
+            width: 350px;\
+            margin-left: -175px;\
+            display: none;\
+            border: 1px solid #CCCCCC;\
+            background-color: #EDEDED;\
+        }\
+        #sycBoxMenuContent {\
+            padding: 3px 3px 15px 3px;\
+        }\
+        #sycBoxMenuContent > label {\
+            display: block;\
+            padding: 0 0 3px 4px;\
+        }\
+        input[type="checkbox"].sycBoxSetToggle {\
+            position: relative;\
+            top: -1px;\
+            width: 13px;\
+            height: 13px;\
+            margin:0;\
+            margin-right: 3px;\
+            padding: 0;\
+            vertical-align: bottom;\
+            *overflow: hidden;\
+        }\
+        #sycBoxMenuClose {\
+            position: absolute;\
+            top: 0;\
+            right: 0;\
+            padding: 1px 4px 0 0;\
+            color: white;\
+            font-size: 14px;\
+            cursor: pointer;\
+        }\
+        .sycBoxMenuFooter {\
+            position: absolute;\
+            left: 0;\
+            right: 0;\
+            bottom: 0;\
+            padding: 2px;\
+            text-align: right;\
+            font-size: 10px;\
+        }\
+        .sycBoxMenuFooter > #sycBoxMenuFooterLeft {\
+            position: absolute;\
+            bottom: 0;\
+            text-align: left;\
+        }\
+        a:link.sycBox {\
+            text-decoration: none;\
+        }\
+        a:visited.sycBox {\
+            text-decoration: none;\
+        }\
+        a:hover.sycBox {\
+            text-decoration: none;\
+        }\
+        a:active.sycBox {\
+            text-decoration: none;\
         }'
     );
 })(jQuery);
