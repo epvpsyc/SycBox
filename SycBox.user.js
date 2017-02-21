@@ -52,22 +52,19 @@
 
                 if (!getMessageById(id)) {
                     let $username = $(this).find('td:nth-last-child(2) > span > a');
-                    let color = ($username.find('span').length) ? $username.find('span').css('color') : 'black';
                     let username = ($username.find('span').length) ? $username.find('span').html() : $username.text().slice(1, -1);
-                    let text = $(this).find('td').last().html().trim();
                     let url = $(this).find('td:nth-last-child(2) > span > a').attr('href');
-                    let userid = parseInt(url.split('/').pop().split('-')[0]);
-
-                    text = (settings.removeSmileys) ? removeSmileys(text) : text;
+                    let text = $(this).find('td').last().html().trim();
+                    if (settings.removeSmileys) text = removeSmileys(text);
 
                     let message = {
                         'id': id,
                         'time': $(this).find('.mgc_cb_evo_date').text().trim(),
                         'user': {
-                            'id': userid,
+                            'id': parseInt(url.split('/').pop().split('-')[0]),
                             'url': url,
                             'name': username,
-                            'color': color,
+                            'color': ($username.find('span').length) ? $username.find('span').css('color') : 'black',
                         },
                         'text': text,
                         'appended': false,
@@ -213,9 +210,9 @@
         ];
 
         smileys.forEach(function (smiley, i) {
-            let html = $('<div>').html(text);
-            html.find('img[src$="' + smileys[i][0] + '"]').replaceWith(smileys[i][1]);
-            text = html.html();
+            let $html = $('<div>').html(text);
+            $html.find('img[src$="' + smileys[i][0] + '"]').replaceWith(smileys[i][1]);
+            text = $html.html();
         });
 
         return $(text).html();
@@ -238,7 +235,10 @@
         let channelID = (settings.useEnglishChannel ? 1 : 0);
 
         let sendAjax = new vB_AJAX_Handler(true);
-        sendAjax.send('//www.elitepvpers.com/forum/mgc_cb_evo_ajax.php', 'do=ajax_chat&channel_id=' + channelID + '&chat=' + PHP.urlencode(message) + '&securitytoken=' + SECURITYTOKEN);
+        sendAjax.send(
+            '//www.elitepvpers.com/forum/mgc_cb_evo_ajax.php',
+            'do=ajax_chat&channel_id=' + channelID + '&chat=' + PHP.urlencode(message) + '&securitytoken=' + SECURITYTOKEN
+        );
         setTimeout(function () {
             updateChatHistory();
         }, 1000);
@@ -250,7 +250,7 @@
             'useEnglishChannel': false,
         };
 
-        let prefix = "sycBox_";
+        let prefix = 'sycBox_';
         let storage = (localStorage.getItem(prefix + key));
 
         if (storage === null) {
@@ -259,14 +259,14 @@
             storage = localStorage.getItem(prefix + key);
         }
 
-        storage = (storage === 'false') ? false : storage;
-        storage = (storage === 'true') ? true : storage;
+        if (storage === 'false') storage = false;
+        if (storage === 'true') storage = true;
 
         return storage;
     }
 
     function setStorage(key, value) {
-        let prefix = "sycBox_";
+        let prefix = 'sycBox_';
         localStorage.setItem(prefix + key, value);
         return value;
     }
@@ -282,8 +282,7 @@
     initTable();
 
     $('#sycBoxSend').keypress(function (e) {
-        let key = e.which;
-        if (key === 13) {
+        if (e.which === 13) {
             sendMessage($(this).val());
             $(this).val('');
         }
@@ -326,7 +325,6 @@
         }
     }, 5000);
 
-    // apply css
     appendStyleRaw(
         '.sycBoxTitle {\
             padding: 4px;\
