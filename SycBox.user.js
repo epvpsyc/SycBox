@@ -51,8 +51,9 @@
                 let id = parseInt($(this).find('td:first').attr('id').replace('chat_', ''));
 
                 if (!getMessageById(id)) {
-                    let color = ($(this).find('td:nth-last-child(2) > span > a > span').length) ? $(this).find('td:nth-last-child(2) > span > a > span').css('color') : 'black';
-                    let username = ($(this).find('td:nth-last-child(2) > span > a > span').length) ? $(this).find('td:nth-last-child(2) > span > a > span').html() : $(this).find('td:nth-last-child(2) > span > a').text().slice(1, -1);
+                    let $username = $(this).find('td:nth-last-child(2) > span > a');
+                    let color = ($($username).find('span').length) ? $($username).find('span').css('color') : 'black';
+                    let username = ($($username).find('span').length) ? $($username).find('span').html() : $($username).text().slice(1, -1);
                     let text = $(this).find('td').last().html().trim();
                     let url = $(this).find('td:nth-last-child(2) > span > a').attr('href');
                     let userid = parseInt(url.split('/').pop().split('-')[0]);
@@ -93,19 +94,19 @@
         $('#sycBoxTbody').parent().attr('id', 'sycBoxTable');
 
         // title
-        $(
+        $('#sycBoxTable').before(
             '<div class="sycBoxTitle">e*pvp Premium Shoutbox ' +
             '<span class="thead">[<a target="_blank" href="//www.elitepvpers.com/forum/mgc_cb_evo.php?do=view_archives&amp;page=1">Archiv</a>]</span>' +
             '<span class="thead">[<a id="sycBoxMenuBtn" style="text-decoration: underline; cursor: pointer;">SycBox</a>]</span>' +
             '</div>'
-        ).insertBefore('#sycBoxTable');
+        );
 
         // input
-        $(
+        $('#sycBoxTable').after(
             '<div id="sycBoxInputCon">' +
             '<input type="text" id="sycBoxSend" tabindex="1">' +
             '</div>'
-        ).insertAfter('#sycBoxTable');
+        );
 
         // set sizes for sb
         $('#sycBoxTable').width(sbWidth + 'px');
@@ -124,6 +125,7 @@
 
                 // layout:
                 // date | username | message text
+                // 13:37 Syc This is an example message
 
                 let line = '<tr>' +
                     '<td><span title="Add user to input" class="sycBoxTime" data-sycbox-id="' + chat.id + '">' +
@@ -143,7 +145,9 @@
 
         // in the case of a message actually being added to the SB, scroll down
         if (appended) {
-            $('#sycBoxTable').animate({ scrollTop: $('#sycBoxTable').prop('scrollHeight') });
+            $('#sycBoxTable').animate({
+                scrollTop: $('#sycBoxTable').prop('scrollHeight')
+            });
         }
     }
 
@@ -232,7 +236,7 @@
 
         let sendAjax = new vB_AJAX_Handler(true);
         sendAjax.send('//www.elitepvpers.com/forum/mgc_cb_evo_ajax.php', 'do=ajax_chat&channel_id=' + channelID + '&chat=' + PHP.urlencode(message) + '&securitytoken=' + SECURITYTOKEN);
-        setTimeout(function() {
+        setTimeout(function () {
             updateChatHistory();
         }, 1000);
     }
