@@ -52,8 +52,8 @@
 
                 if (!getMessageById(id)) {
                     let $username = $(this).find('td:nth-last-child(2) > span > a');
-                    let color = ($($username).find('span').length) ? $($username).find('span').css('color') : 'black';
-                    let username = ($($username).find('span').length) ? $($username).find('span').html() : $($username).text().slice(1, -1);
+                    let color = ($username.find('span').length) ? $username.find('span').css('color') : 'black';
+                    let username = ($username.find('span').length) ? $username.find('span').html() : $username.text().slice(1, -1);
                     let text = $(this).find('td').last().html().trim();
                     let url = $(this).find('td:nth-last-child(2) > span > a').attr('href');
                     let userid = parseInt(url.split('/').pop().split('-')[0]);
@@ -87,14 +87,16 @@
     }
 
     function initTable() {
-        let sbWidth = $('tbody#mgc_cb_evo_opened').width();
-        let sbHeight = $('tbody#mgc_cb_evo_opened').height();
+        let $oldSB = $('tbody#mgc_cb_evo_opened');
+        let $sycBoxTable = $('#sycBoxTable');
+        let sbWidth = $oldSB.width();
+        let sbHeight = $oldSB.height();
 
-        $('tbody#mgc_cb_evo_opened').parent().html('<tbody id="sycBoxTbody"></tbody>');
+        $oldSB.parent().html('<tbody id="sycBoxTbody"></tbody>');
         $('#sycBoxTbody').parent().attr('id', 'sycBoxTable');
 
         // title
-        $('#sycBoxTable').before(
+        $sycBoxTable.before(
             '<div class="sycBoxTitle">e*pvp Premium Shoutbox ' +
             '<span class="thead">[<a target="_blank" href="//www.elitepvpers.com/forum/mgc_cb_evo.php?do=view_archives&amp;page=1">Archiv</a>]</span>' +
             '<span class="thead">[<a id="sycBoxMenuBtn" style="text-decoration: underline; cursor: pointer;">SycBox</a>]</span>' +
@@ -102,15 +104,15 @@
         );
 
         // input
-        $('#sycBoxTable').after(
+        $sycBoxTable.after(
             '<div id="sycBoxInputCon">' +
             '<input type="text" id="sycBoxSend" tabindex="1">' +
             '</div>'
         );
 
         // set sizes for sb
-        $('#sycBoxTable').width(sbWidth + 'px');
-        $('#sycBoxTable').css('max-height', sbHeight + 'px');
+        $sycBoxTable.width(sbWidth + 'px');
+        $sycBoxTable.css('max-height', sbHeight + 'px');
 
         updateChatHistory(true);
         initMenu();
@@ -145,15 +147,16 @@
 
         // in the case of a message actually being added to the SB, scroll down
         if (appended) {
-            $('#sycBoxTable').animate({
-                scrollTop: $('#sycBoxTable').prop('scrollHeight')
+            let $sycBoxTable = $('#sycBoxTable');
+            $sycBoxTable.animate({
+                scrollTop: $sycBoxTable.prop('scrollHeight')
             });
         }
     }
 
     function clearSB() {
         chatHistory = [];
-        $('#sycBoxTbody tr').remove();
+        $('#sycBoxTable').find('tr').remove();
 
         updateChatHistory(true);
     }
