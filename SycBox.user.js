@@ -4,7 +4,7 @@
 // @description customized ShoutBox
 // @include     *//www.elitepvpers.com/forum/
 // @author      Syc
-// @version     1.0.8
+// @version     1.0.9
 // @downloadURL https://github.com/epvpsyc/SycBox/raw/master/SycBox.user.js
 // @updateURL   https://github.com/epvpsyc/SycBox/raw/master/SycBox.user.js
 // @grant       none
@@ -304,7 +304,7 @@
         let bburl = '@[URL="' + message.user.url + '"]' +
             message.user.name + '[/URL] ';
 
-        let $input = $('#mgc_cb_evo_input');
+        let $input = $('#sycBoxSend');
         $input.val($input.val() + bburl);
         $input.focus();
     });
