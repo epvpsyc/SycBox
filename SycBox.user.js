@@ -4,7 +4,7 @@
 // @description customized ShoutBox
 // @include     *//www.elitepvpers.com/forum/
 // @author      Syc
-// @version     1.0.10
+// @version     1.0.11
 // @downloadURL https://github.com/epvpsyc/SycBox/raw/master/SycBox.user.js
 // @updateURL   https://github.com/epvpsyc/SycBox/raw/master/SycBox.user.js
 // @grant       none
@@ -113,6 +113,7 @@
 
         updateChatHistory(true);
         initMenu();
+        checkForPM();
     }
 
     function appendToSB() {
@@ -122,20 +123,29 @@
             if (!chat.appended) {
                 chatHistory[i].appended = true;
 
-                // layout:
-                // date | username | message text
-                // 13:37 Syc this is an example message
+                let timetitle = (chat.isPM) ? 'open pm' : 'add user to input';
+
+                let messageHTML;
+                if (chat.isPM) {
+                    messageHTML = '<td><span style="color: DarkOrange;" title="' + timetitle + '" class="sycBoxTime" data-sycbox-id="' +
+                        chat.id + '">' + chat.text + '</span></td>';
+                } else {
+                    messageHTML = '<td>' + chat.text + '</td>';
+
+                }
 
                 let line = '<tr>' +
-                    '<td><span title="Add user to input" class="sycBoxTime" data-sycbox-id="' + chat.id + '">' +
+                    '<td><span title="' + timetitle + '" class="sycBoxTime" data-sycbox-id="' + chat.id + '">' +
                     chat.time +
                     '</span></td>' +
                     '<td><a class="sycBox" style="color:' + chat.user.color + ';" target="_blank" href="' + chat.user.url + '">' +
                     chat.user.name +
                     '</a></td>' +
-                    '<td>' + chat.text + '</td>' +
+                    messageHTML +
                     '</tr>';
+
                 $('#sycBoxTbody').append(line);
+
                 appended = true;
             }
         });
@@ -244,6 +254,49 @@
         }, 1000);
     }
 
+    function checkForPM () {
+        $.get('https://www.elitepvpers.com/forum/private.php', function(data){
+            let $html = $.parseHTML(data);
+            $($html).find('form#pmform tbody[id^=collapseobj_pmf0] > tr:first').each(function(i, tr) {
+                if ($(tr).find('td:first img').attr('src').includes('www.elitepvpers.com/forum/images/elitepvpers/statusicon/pm_new.gif')) {
+                    let id = 'pm' + findGetParameter($(tr).find('td:nth-child(3) div:first a:first').attr('href'), 'pmid')
+
+                    if (!getMessageById(id)) {
+                        let userid = $(tr).find('td:nth-child(3) div:nth-child(2) strong span')
+                            .attr('onclick').split('/')[1].split('-')[0];
+
+                        let message = {
+                            'id': 'pm' + findGetParameter($(tr).find('td:nth-child(3) div:first a:first').attr('href'), 'pmid'),
+                            'time': $(tr).find('td:nth-child(3) div:nth-child(2) span:first').text(),
+                            'user': {
+                                'id': userid,
+                                'url': '//www.elitepvpers.com/forum/members/' + userid + '--.html',
+                                'name': $(tr).find('td:nth-child(3) div:nth-child(2) strong').text(),
+                                'color': 'black',
+                            },
+                            'text': 'New Private Message: ' + $(tr).find('td:nth-child(3) div:first a:first').text(),
+                            'appended': false,
+                            'isPM': true,
+                        };
+
+                        chatHistory.push(message);
+                        appendToSB();
+                    }
+                }
+            });
+        });
+    }
+
+    function findGetParameter(url, parameterName) {
+        let result = null;
+        let tmp = [];
+        url.split('&').forEach(function (item) {
+            tmp = item.split('=');
+            if (tmp[0] === parameterName) result = decodeURIComponent(tmp[1]);
+        });
+        return result;
+    }
+
     function getStorage(key) {
         const settingsDefault = {
             'removeSmileys': true,
@@ -254,7 +307,7 @@
         let storage = (localStorage.getItem(prefix + key));
 
         if (storage === null) {
-            storage = setStorage(key, settingsDefault[key]);
+            storage = (key in settingsDefault) ? setStorage(key, settingsDefault[key]) : '';
         } else {
             storage = localStorage.getItem(prefix + key);
         }
@@ -306,16 +359,23 @@
     });
 
     $('#sycBoxTbody').on('click', 'span.sycBoxTime', function () {
-        let message = getMessageById(parseInt($(this).attr('data-sycbox-id')));
-        let bburl = '@[URL="' + message.user.url + '"]' +
-            message.user.name + '[/URL] ';
+        let id = $(this).attr('data-sycbox-id');
 
-        let $input = $('#sycBoxSend');
-        $input.val($input.val() + bburl);
-        $input.focus();
+        if (!id.includes('pm')) {
+            let message = getMessageById(parseInt(id));
+            let bburl = '@[URL="' + message.user.url + '"]' +
+                message.user.name + '[/URL] ';
+
+            let $input = $('#sycBoxSend');
+            $input.val($input.val() + bburl);
+            $input.focus();
+        } else {
+            window.open('//www.elitepvpers.com/forum/private.php?do=showpm&pmid=' + id.substring(2), '_blank');
+        }
     });
 
     window.setInterval(function () {
+        checkForPM();
         window.clearTimeout(idleTimeout);
     }, 30000);
 
