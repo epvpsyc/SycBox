@@ -4,7 +4,7 @@
 // @description customized ShoutBox
 // @include     *//www.elitepvpers.com/forum/
 // @author      Syc
-// @version     1.0.11
+// @version     1.0.12
 // @downloadURL https://github.com/epvpsyc/SycBox/raw/master/SycBox.user.js
 // @updateURL   https://github.com/epvpsyc/SycBox/raw/master/SycBox.user.js
 // @grant       none
@@ -164,8 +164,6 @@
     function clearSB() {
         chatHistory = [];
         $('#sycBoxTable').find('tr').remove();
-
-        updateChatHistory(true);
     }
 
     function initMenu() {
