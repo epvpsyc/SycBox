@@ -4,7 +4,7 @@
 // @description customized ShoutBox
 // @include     *//www.elitepvpers.com/forum/
 // @author      Syc
-// @version     1.0.12
+// @version     1.0.13
 // @downloadURL https://github.com/epvpsyc/SycBox/raw/master/SycBox.user.js
 // @updateURL   https://github.com/epvpsyc/SycBox/raw/master/SycBox.user.js
 // @grant       none
@@ -123,11 +123,11 @@
             if (!chat.appended) {
                 chatHistory[i].appended = true;
 
-                let timetitle = (chat.isPM) ? 'open pm' : 'add user to input';
+                let timetitle = (chat.isPM) ? 'Open PM' : 'Add user to input';
 
                 let messageHTML;
                 if (chat.isPM) {
-                    messageHTML = '<td><span style="color: DarkOrange;" title="' + timetitle + '" class="sycBoxTime" data-sycbox-id="' +
+                    messageHTML = '<td><span style="color: DarkOrange;">New PM: </span><span title="' + timetitle + '" class="sycBoxTime" data-sycbox-id="' +
                         chat.id + '">' + chat.text + '</span></td>';
                 } else {
                     messageHTML = '<td>' + chat.text + '</td>';
@@ -257,7 +257,7 @@
             let $html = $.parseHTML(data);
             $($html).find('form#pmform tbody[id^=collapseobj_pmf0] > tr:first').each(function(i, tr) {
                 if ($(tr).find('td:first img').attr('src').includes('www.elitepvpers.com/forum/images/elitepvpers/statusicon/pm_new.gif')) {
-                    let id = 'pm' + findGetParameter($(tr).find('td:nth-child(3) div:first a:first').attr('href'), 'pmid')
+                    let id = 'pm' + findGetParameter($(tr).find('td:nth-child(3) div:first a:first').attr('href'), 'pmid');
 
                     if (!getMessageById(id)) {
                         let userid = $(tr).find('td:nth-child(3) div:nth-child(2) strong span')
@@ -272,7 +272,7 @@
                                 'name': $(tr).find('td:nth-child(3) div:nth-child(2) strong').text(),
                                 'color': 'black',
                             },
-                            'text': 'New Private Message: ' + $(tr).find('td:nth-child(3) div:first a:first').text(),
+                            'text': $(tr).find('td:nth-child(3) div:first a:first').text(),
                             'appended': false,
                             'isPM': true,
                         };
