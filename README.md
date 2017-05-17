@@ -6,6 +6,7 @@ Script to customize the default ShoutBox
 * no idle
 * mention user
 * smiley removal
+* new PM notification
 
 ## HowTo Install
 
