@@ -4,7 +4,7 @@
 // @description customized ShoutBox
 // @include     *//www.elitepvpers.com/forum/
 // @author      Syc
-// @version     1.0.13
+// @version     1.0.14
 // @downloadURL https://github.com/epvpsyc/SycBox/raw/master/SycBox.user.js
 // @updateURL   https://github.com/epvpsyc/SycBox/raw/master/SycBox.user.js
 // @grant       none
@@ -184,6 +184,10 @@
             '<input type="checkbox" data-sycbox-id="useEnglishChannel" class="sycBoxSetToggle"' + useEnglishChannelHtml + '>' +
             'use english channel' +
             '</label>' +
+            '<label>' +
+            '<input type="number" data-sycbox-id="fontSize" class="sycBoxSetInput"  min="7" max="99" value="' + settings.fontSize + '" />' +
+            ' px Font Size' +
+            '</label>' +
             '</div>' +
             '<div class="sycBoxMenuFooter">' +
             '<div id="sycBoxMenuFooterLeft">' +
@@ -252,10 +256,10 @@
         }, 1000);
     }
 
-    function checkForPM () {
-        $.get('https://www.elitepvpers.com/forum/private.php', function(data){
+    function checkForPM() {
+        $.get('https://www.elitepvpers.com/forum/private.php', function (data) {
             let $html = $.parseHTML(data);
-            $($html).find('form#pmform tbody[id^=collapseobj_pmf0] > tr:first').each(function(i, tr) {
+            $($html).find('form#pmform tbody[id^=collapseobj_pmf0] > tr:first').each(function (i, tr) {
                 if ($(tr).find('td:first img').attr('src').includes('www.elitepvpers.com/forum/images/elitepvpers/statusicon/pm_new.gif')) {
                     let id = 'pm' + findGetParameter($(tr).find('td:nth-child(3) div:first a:first').attr('href'), 'pmid');
 
@@ -299,6 +303,7 @@
         const settingsDefault = {
             'removeSmileys': true,
             'useEnglishChannel': false,
+            'fontSize': '11',
         };
 
         let prefix = 'sycBox_';
@@ -326,7 +331,15 @@
         settings = {
             'removeSmileys': getStorage('removeSmileys'),
             'useEnglishChannel': getStorage('useEnglishChannel'),
+            'fontSize': getStorage('fontSize'),
         };
+
+        applyCustomStyle();
+    }
+
+    function applyCustomStyle() {
+        $('#sycBoxTbody td').css('font-size', settings.fontSize + 'px');
+        $('#sycBoxSend').css('font-size', settings.fontSize + 'px');
     }
 
     updateSettings();
@@ -354,6 +367,11 @@
         if ($(this).attr('data-sycbox-id') === 'useEnglishChannel') {
             clearSB();
         }
+    });
+
+    $('input.sycBoxSetInput').on('change', function () {
+        setStorage($(this).attr('data-sycbox-id'), $(this).val());
+        updateSettings();
     });
 
     $('#sycBoxTbody').on('click', 'span.sycBoxTime', function () {
@@ -412,7 +430,7 @@
             padding: 1px 2px 1px 2px;\
             vertical-align: top;\
             white-space: nowrap;\
-            font-size: 11px;\
+            font-size: ' + settings.fontSize + 'px;\
         }\
         #sycBoxTbody tr td:last-child {\
             width: 100%;\
@@ -426,9 +444,9 @@
             padding: 0 2px 0 2px;\
             border: 1px solid #CCCCCC;\
             border-top: 0;\
-            font-size: 11px;\
             box-sizing: border-box;\
             -moz-box-sizing: border-box;\
+            font-size: ' + settings.fontSize + 'px;\
         }\
         span.sycBoxTime {\
             cursor: pointer;\
@@ -461,6 +479,14 @@
             padding: 0;\
             vertical-align: bottom;\
             *overflow: hidden;\
+        }\
+        input[type="number"].sycBoxSetInput {\
+            width: 40px;\
+            height: 20px;\
+            padding: 2px 2px 0 2px;\
+            border: 1px solid #CCCCCC;\
+            box-sizing: border-box;\
+            -moz-box-sizing: border-box;\
         }\
         #sycBoxMenuClose {\
             position: absolute;\
