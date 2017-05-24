@@ -4,7 +4,7 @@
 // @description customized ShoutBox
 // @include     *//www.elitepvpers.com/forum/
 // @author      Syc
-// @version     1.0.14
+// @version     1.0.15
 // @downloadURL https://github.com/epvpsyc/SycBox/raw/master/SycBox.user.js
 // @updateURL   https://github.com/epvpsyc/SycBox/raw/master/SycBox.user.js
 // @grant       none
@@ -85,7 +85,6 @@
 
     function initTable() {
         let $oldSB = $('tbody#mgc_cb_evo_opened');
-        let sbWidth = $oldSB.width();
         let sbHeight = $oldSB.height();
 
         $oldSB.parent().html('<tbody id="sycBoxTbody"></tbody>');
@@ -108,7 +107,6 @@
         );
 
         // set sizes for sb
-        $sycBoxTable.width(sbWidth + 'px');
         $sycBoxTable.css('max-height', sbHeight + 'px');
 
         updateChatHistory(true);
@@ -422,8 +420,6 @@
             display: block;\
             table-layout: fixed;\
             overflow: auto;\
-        }\
-        #sycBoxTbody {\
             width: 100%;\
         }\
         #sycBoxTbody td {\
