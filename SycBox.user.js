@@ -4,7 +4,7 @@
 // @description customized ShoutBox
 // @include     *//www.elitepvpers.com/forum/
 // @author      Syc
-// @version     1.0.15
+// @version     1.0.16
 // @downloadURL https://github.com/epvpsyc/SycBox/raw/master/SycBox.user.js
 // @updateURL   https://github.com/epvpsyc/SycBox/raw/master/SycBox.user.js
 // @grant       none
@@ -420,7 +420,7 @@
             display: block;\
             table-layout: fixed;\
             overflow: auto;\
-            width: 100%;\
+            width: 962px;\
         }\
         #sycBoxTbody td {\
             padding: 1px 2px 1px 2px;\
