@@ -4,7 +4,7 @@
 // @description customized ShoutBox
 // @include     *//www.elitepvpers.com/forum/
 // @author      Syc
-// @version     1.0.16
+// @version     1.0.17
 // @downloadURL https://github.com/epvpsyc/SycBox/raw/master/SycBox.user.js
 // @updateURL   https://github.com/epvpsyc/SycBox/raw/master/SycBox.user.js
 // @grant       none
@@ -217,6 +217,27 @@
             ['rolleyes.gif', ':rolleyes:'],
             ['eek.gif', ':eek:'],
             ['awesome.gif', ':awesome:'],
+            // new "memes"
+            ['lul.png', ':lul:'],
+            ['reeee.png', ':reeee:'],
+            ['topnep.png', ':topnep:'],
+            ['kappapride.png', ':kappapride:'],
+            ['wutface.png', ':wutface:'],
+            ['4head.png', ':4head:'],
+            ['elegiggle.png', ':elegiggle:'],
+            ['wojak.png', ':wojak:'],
+            ['thinking.png', ':thinking:'],
+            ['kappa.png', ':kappa:'],
+            ['notsureif.png', ':notsureif:'],
+            ['feelsbadman.png', ':feelsbadman:'],
+            ['heyguys.png', ':heyguys:'],
+            ['pogchamp.png', ':pogchamp:'],
+            ['babyrage.png', ':babyrage:'],
+            // because there is a typo on elitepvers' end
+            // ['kreygasm.gif', ':kreygasm:'],
+            ['kreygasm.png', ':keygasm:'],
+            ['feelsgoodman.png', ':feelsgoodman:'],
+            ['rollsafe.png', ':rollsafe:'],
         ];
 
         smileys.forEach(function (smiley, i) {
