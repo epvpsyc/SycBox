@@ -233,9 +233,7 @@
             ['heyguys.png', ':heyguys:'],
             ['pogchamp.png', ':pogchamp:'],
             ['babyrage.png', ':babyrage:'],
-            // because there is a typo on elitepvers' end
-            // ['kreygasm.gif', ':kreygasm:'],
-            ['kreygasm.png', ':keygasm:'],
+            ['kreygasm.gif', ':kreygasm:'],
             ['feelsgoodman.png', ':feelsgoodman:'],
             ['rollsafe.png', ':rollsafe:'],
         ];
