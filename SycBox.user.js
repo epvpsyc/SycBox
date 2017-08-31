@@ -4,7 +4,7 @@
 // @description customized ShoutBox
 // @include     *//www.elitepvpers.com/forum/
 // @author      Syc
-// @version     1.0.17
+// @version     1.0.18
 // @downloadURL https://github.com/epvpsyc/SycBox/raw/master/SycBox.user.js
 // @updateURL   https://github.com/epvpsyc/SycBox/raw/master/SycBox.user.js
 // @grant       none
@@ -233,7 +233,7 @@
             ['heyguys.png', ':heyguys:'],
             ['pogchamp.png', ':pogchamp:'],
             ['babyrage.png', ':babyrage:'],
-            ['kreygasm.gif', ':kreygasm:'],
+            ['kreygasm.png', ':kreygasm:'],
             ['feelsgoodman.png', ':feelsgoodman:'],
             ['rollsafe.png', ':rollsafe:'],
         ];
