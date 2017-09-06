@@ -191,7 +191,9 @@
             '<div id="sycBoxMenuFooterLeft">' +
             'v' + GM_info['script']['version'] +
             '</div>' +
-            '<a target="_blank" href="https://github.com/epvpsyc/SycBox">Github</a> | &copy;<a target="_blank" href="http://www.elitepvpers.com/forum/members/3409936-syc.html">Syc</a>' +
+            '<a target="_blank" href="https://github.com/epvpsyc/SycBox">Github</a>' + 
+	    '| &copy;' + 
+	    '<a target="_blank" href="http://www.elitepvpers.com/forum/members/3409936-syc.html">Syc</a>' +
             '</div>' +
             '</div>'
         ).appendTo('body');
