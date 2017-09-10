@@ -4,7 +4,7 @@
 // @description customized ShoutBox
 // @include     *//www.elitepvpers.com/forum/
 // @author      Syc
-// @version     1.0.18
+// @version     1.0.19
 // @downloadURL https://github.com/epvpsyc/SycBox/raw/master/SycBox.user.js
 // @updateURL   https://github.com/epvpsyc/SycBox/raw/master/SycBox.user.js
 // @grant       none
@@ -12,14 +12,16 @@
 (function ($) {
     // refreshActive will be false for the beginning
     // this is supposed to prevent refreshing the SB before the SB is even properly initialized
+    // also don't update while it's updating
     let refreshActive = false;
+    let initialLoad = true;
 
     let chatHistory = [];
     let settings;
 
+
     // adding css style this way
-    // since github did not like the way of splitting the css into a separate file
-    // and loading it from github
+    // since github did not like the way of splitting the css into a separate file, loading it from github
     //
     // thanks to Der-Eddy
     function appendStyleRaw(style) {
@@ -112,6 +114,7 @@
         updateChatHistory(true);
         initMenu();
         checkForPM();
+        initialLoad = false;
     }
 
     function appendToSB() {
@@ -145,6 +148,10 @@
                 $('#sycBoxTbody').append(line);
 
                 appended = true;
+
+                if (!initialLoad) {
+                    checkForNotification(chat);
+                }
             }
         });
 
@@ -167,6 +174,7 @@
     function initMenu() {
         let removeSmileysHtml = (settings.removeSmileys) ? 'checked' : '';
         let useEnglishChannelHtml = (settings.useEnglishChannel) ? 'checked' : '';
+        let showNotifications = (settings.showNotifications) ? 'checked' : '';
 
         $(
             '<div id="sycBoxMenu">' +
@@ -176,11 +184,15 @@
             '<div id="sycBoxMenuContent">' +
             '<label>' +
             '<input type="checkbox" data-sycbox-id="removeSmileys" class="sycBoxSetToggle"' + removeSmileysHtml + '>' +
-            'remove smiley images' +
+            'Remove smiley images' +
             '</label>' +
             '<label>' +
             '<input type="checkbox" data-sycbox-id="useEnglishChannel" class="sycBoxSetToggle"' + useEnglishChannelHtml + '>' +
-            'use english channel' +
+            'Use english channel' +
+            '</label>' +
+            '<label>' +
+            '<input type="checkbox" data-sycbox-id="showNotifications" class="sycBoxSetToggle"' + showNotifications + '>' +
+            'Show Notifications when mentioned (@' + getUserName() + ')' +
             '</label>' +
             '<label>' +
             '<input type="number" data-sycbox-id="fontSize" class="sycBoxSetInput"  min="7" max="99" value="' + settings.fontSize + '" />' +
@@ -191,9 +203,9 @@
             '<div id="sycBoxMenuFooterLeft">' +
             'v' + GM_info['script']['version'] +
             '</div>' +
-            '<a target="_blank" href="https://github.com/epvpsyc/SycBox">Github</a>' + 
-	    '| &copy;' + 
-	    '<a target="_blank" href="http://www.elitepvpers.com/forum/members/3409936-syc.html">Syc</a>' +
+            '<a target="_blank" href="https://github.com/epvpsyc/SycBox">Github</a>' +
+            '| &copy;' +
+            '<a target="_blank" href="http://www.elitepvpers.com/forum/members/3409936-syc.html">Syc</a>' +
             '</div>' +
             '</div>'
         ).appendTo('body');
@@ -250,7 +262,7 @@
     }
 
     function getMessageById(id) {
-        let message = undefined;
+        let message;
 
         chatHistory.forEach(function (chat) {
             if (chat.id === id) {
@@ -308,6 +320,42 @@
         });
     }
 
+    function getUserName() {
+        return $('#userbaritems').find('li:first > a').text();
+    }
+
+    function requestNotificationPermission() {
+        if (!Notification) {
+            alert('Desktop notifications not available in your browser. Try Chromium.');
+            return;
+        }
+
+        if (Notification.permission !== "granted")
+            Notification.requestPermission();
+    }
+
+    function checkForNotification(line) {
+        if($($.parseHTML(line.text)).text().includes('@' + getUserName())) {
+            createNotification(line.user.name, line.text);
+        }
+    }
+
+    function createNotification(fromName, text) {
+        if (Notification.permission !== "granted")
+            Notification.requestPermission();
+        else {
+            let notification = new Notification('New Shoutbox Mention from ' + fromName, {
+                icon: 'https://i.epvpimg.com/jIHYbab.png',
+                body: text,
+            });
+
+            notification.onclick = function () {
+                window.focus();
+            };
+
+        }
+    }
+
     function findGetParameter(url, parameterName) {
         let result = null;
         let tmp = [];
@@ -322,6 +370,7 @@
         const settingsDefault = {
             'removeSmileys': true,
             'useEnglishChannel': false,
+            'showNotifications': false,
             'fontSize': '11',
         };
 
@@ -350,6 +399,7 @@
         settings = {
             'removeSmileys': getStorage('removeSmileys'),
             'useEnglishChannel': getStorage('useEnglishChannel'),
+            'showNotifications': getStorage('showNotifications'),
             'fontSize': getStorage('fontSize'),
         };
 
@@ -385,6 +435,10 @@
 
         if ($(this).attr('data-sycbox-id') === 'useEnglishChannel') {
             clearSB();
+        }
+
+        if ($(this).attr('data-sycbox-id') === 'showNotifications') {
+            requestNotificationPermission();
         }
     });
 

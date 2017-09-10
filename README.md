@@ -7,6 +7,7 @@ Script to customize the default ShoutBox
 * mention user
 * smiley removal
 * new PM notification
+* Desktop Notification for Mentions (needs to be activated in SycBox Settings)
 
 ## HowTo Install
 
