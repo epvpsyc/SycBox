@@ -4,7 +4,7 @@
 // @description customized ShoutBox
 // @include     *//www.elitepvpers.com/forum/
 // @author      Syc
-// @version     1.0.19
+// @version     1.1
 // @downloadURL https://github.com/epvpsyc/SycBox/raw/master/SycBox.user.js
 // @updateURL   https://github.com/epvpsyc/SycBox/raw/master/SycBox.user.js
 // @grant       none
@@ -82,6 +82,7 @@
             }
 
             refreshActive = true;
+            initialLoad = false;
         });
     }
 
@@ -114,7 +115,6 @@
         updateChatHistory(true);
         initMenu();
         checkForPM();
-        initialLoad = false;
     }
 
     function appendToSB() {
@@ -135,7 +135,9 @@
 
                 }
 
-                let line = '<tr>' +
+                let line = (!checkForMention(chat)) ? '<tr>' : '<tr style="background-color: #ADD8E6;">';
+
+                line +=
                     '<td><span title="' + timetitle + '" class="sycBoxTime" data-sycbox-id="' + chat.id + '">' +
                     chat.time +
                     '</span></td>' +
@@ -148,10 +150,6 @@
                 $('#sycBoxTbody').append(line);
 
                 appended = true;
-
-                if (!initialLoad) {
-                    checkForNotification(chat);
-                }
             }
         });
 
@@ -175,6 +173,7 @@
         let removeSmileysHtml = (settings.removeSmileys) ? 'checked' : '';
         let useEnglishChannelHtml = (settings.useEnglishChannel) ? 'checked' : '';
         let showNotifications = (settings.showNotifications) ? 'checked' : '';
+        let showMentionHighlight = (settings.highlightMentions) ? 'checked' : '';
 
         $(
             '<div id="sycBoxMenu">' +
@@ -191,8 +190,12 @@
             'Use english channel' +
             '</label>' +
             '<label>' +
+            '<input type="checkbox" data-sycbox-id="highlightMentions" class="sycBoxSetToggle"' + showMentionHighlight + '>' +
+            'Highlight row when mentioned (@' + getUserName() + ')' +
+            '</label>' +
+            '<label>' +
             '<input type="checkbox" data-sycbox-id="showNotifications" class="sycBoxSetToggle"' + showNotifications + '>' +
-            'Show Notifications when mentioned (@' + getUserName() + ')' +
+            'Show notifications when mentioned (@' + getUserName() + ')' +
             '</label>' +
             '<label>' +
             '<input type="number" data-sycbox-id="fontSize" class="sycBoxSetInput"  min="7" max="99" value="' + settings.fontSize + '" />' +
@@ -334,17 +337,28 @@
             Notification.requestPermission();
     }
 
-    function checkForNotification(line) {
-        if($($.parseHTML(line.text)).text().includes('@' + getUserName())) {
-            createNotification(line.user.name, line.text);
+    function checkForMention(line) {
+        if ($($.parseHTML(line.text)).text().includes('@' + getUserName())) {
+            console.log('initial', initialLoad);
+            console.log('refresh', refreshActive);
+            if (!initialLoad && settings.showNotifications) {
+                createNotification(line.user.name, line.text.trim());
+            }
+
+            if(settings.highlightMentions) {
+                return true;
+            }
         }
+
+        return false;
+
     }
 
     function createNotification(fromName, text) {
         if (Notification.permission !== "granted")
             Notification.requestPermission();
         else {
-            let notification = new Notification('New Shoutbox Mention from ' + fromName, {
+            let notification = new Notification(fromName + ' @ Shoutbox', {
                 icon: 'https://i.epvpimg.com/jIHYbab.png',
                 body: text,
             });
@@ -370,6 +384,7 @@
         const settingsDefault = {
             'removeSmileys': true,
             'useEnglishChannel': false,
+            'showMentionHighlight': false,
             'showNotifications': false,
             'fontSize': '11',
         };
@@ -399,6 +414,7 @@
         settings = {
             'removeSmileys': getStorage('removeSmileys'),
             'useEnglishChannel': getStorage('useEnglishChannel'),
+            "highlightMentions": getStorage('highlightMentions'),
             'showNotifications': getStorage('showNotifications'),
             'fontSize': getStorage('fontSize'),
         };
