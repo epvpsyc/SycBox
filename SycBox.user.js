@@ -345,7 +345,7 @@
                 createNotification(line.user.name, line.text.trim());
             }
 
-            if(settings.highlightMentions) {
+            if (settings.highlightMentions) {
                 return true;
             }
         }
@@ -491,124 +491,124 @@
     }, 5000);
 
     appendStyleRaw(
-        '.sycBoxTitle {\
-            padding: 4px;\
-            color: white;\
-            background: #1c1e20;\
-            text-align: center;\
-            font: bold 11px tahoma,verdana,geneva,lucida,arial,helvetica,sans-serif;\
-        }\
-        .sycBoxTitle > span {\
-            text-decoration: underline;\
-            cursor: pointer;\
-        }\
-        #sycBoxTable {\
-            padding: 2px;\
-            border: 1px solid #CCCCCC;\
-            background-color: #EDEDED;\
-            border-collapse: collapse;\
-            border-spacing: 0;\
-            display: block;\
-            table-layout: fixed;\
-            overflow: auto;\
-            width: 962px;\
-        }\
-        #sycBoxTbody td {\
-            padding: 1px 2px 1px 2px;\
-            vertical-align: top;\
-            white-space: nowrap;\
-            font-size: ' + settings.fontSize + 'px;\
-        }\
-        #sycBoxTbody tr td:last-child {\
-            width: 100%;\
-            word-wrap: break-word;\
-            white-space: normal;\
-        }\
-        #sycBoxSend {\
-            height: 15px;\
-            width: 100%;\
-            margin-right: -3px;\
-            padding: 0 2px 0 2px;\
-            border: 1px solid #CCCCCC;\
-            border-top: 0;\
-            box-sizing: border-box;\
-            -moz-box-sizing: border-box;\
-            font-size: ' + settings.fontSize + 'px;\
-        }\
-        span.sycBoxTime {\
-            cursor: pointer;\
-        }\
-        #sycBoxMenu {\
-            position: absolute;\
-            top: 20%;\
-            left: 50%;\
-            min-height: 50px;\
-            width: 350px;\
-            margin-left: -175px;\
-            display: none;\
-            border: 1px solid #CCCCCC;\
-            background-color: #EDEDED;\
-        }\
-        #sycBoxMenuContent {\
-            padding: 3px 3px 15px 3px;\
-        }\
-        #sycBoxMenuContent > label {\
-            display: block;\
-            padding: 0 0 3px 4px;\
-        }\
-        input[type="checkbox"].sycBoxSetToggle {\
-            position: relative;\
-            top: -1px;\
-            width: 13px;\
-            height: 13px;\
+        `.sycBoxTitle {
+            padding: 4px;
+            color: white;
+            background: #1c1e20;
+            text-align: center;
+            font: bold 11px tahoma,verdana,geneva,lucida,arial,helvetica,sans-serif;
+        }
+        .sycBoxTitle > span {
+            text-decoration: underline;
+            cursor: pointer;
+        }
+        #sycBoxTable {
+            padding: 2px;
+            border: 1px solid #CCCCCC;
+            background-color: #EDEDED;
+            border-collapse: collapse;
+            border-spacing: 0;
+            display: block;
+            table-layout: fixed;
+            overflow: auto;
+            width: 962px;
+        }
+        #sycBoxTbody td {
+            padding: 1px 2px 1px 2px;
+            vertical-align: top;
+            white-space: nowrap;
+            font-size: ${ settings.fontSize }px;
+        }
+        #sycBoxTbody tr td:last-child {
+            width: 100%;
+            word-wrap: break-word;
+            white-space: normal;
+        }
+        #sycBoxSend {
+            height: 15px;
+            width: 100%;
+            margin-right: -3px;
+            padding: 0 2px 0 2px;
+            border: 1px solid #CCCCCC;
+            border-top: 0;
+            box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            font-size: ${ settings.fontSize }px;
+        }
+        span.sycBoxTime {
+            cursor: pointer;
+        }
+        #sycBoxMenu {
+            position: absolute;
+            top: 20%;
+            left: 50%;
+            min-height: 50px;
+            width: 350px;
+            margin-left: -175px;
+            display: none;
+            border: 1px solid #CCCCCC;
+            background-color: #EDEDED;
+        }
+        #sycBoxMenuContent {
+            padding: 3px 3px 15px 3px;
+        }
+        #sycBoxMenuContent > label {
+            display: block;
+            padding: 0 0 3px 4px;
+        }
+        input[type="checkbox"].sycBoxSetToggle {
+            position: relative;
+            top: -1px;
+            width: 13px;
+            height: 13px;
             margin:0;\
-            margin-right: 3px;\
-            padding: 0;\
-            vertical-align: bottom;\
-            *overflow: hidden;\
-        }\
-        input[type="number"].sycBoxSetInput {\
-            width: 40px;\
-            height: 20px;\
-            padding: 2px 2px 0 2px;\
-            border: 1px solid #CCCCCC;\
-            box-sizing: border-box;\
-            -moz-box-sizing: border-box;\
-        }\
-        #sycBoxMenuClose {\
-            position: absolute;\
-            top: 0;\
-            right: 0;\
-            padding: 1px 4px 0 0;\
-            color: white;\
-            font-size: 14px;\
-            cursor: pointer;\
-        }\
-        .sycBoxMenuFooter {\
-            position: absolute;\
-            left: 0;\
-            right: 0;\
-            bottom: 0;\
-            padding: 2px;\
-            text-align: right;\
-            font-size: 10px;\
-        }\
-        .sycBoxMenuFooter > #sycBoxMenuFooterLeft {\
-            position: absolute;\
-            bottom: 0;\
-            text-align: left;\
-        }\
-        a:link.sycBox {\
-            text-decoration: none;\
-        }\
-        a:visited.sycBox {\
-            text-decoration: none;\
-        }\
-        a:hover.sycBox {\
-            text-decoration: none;\
-        }\
-        a:active.sycBox {\
-            text-decoration: none;\
-        }'
+            margin-right: 3px;
+            padding: 0;
+            vertical-align: bottom;
+            *overflow: hidden;
+        }
+        input[type="number"].sycBoxSetInput {
+            width: 40px;
+            height: 20px;
+            padding: 2px 2px 0 2px;
+            border: 1px solid #CCCCCC;
+            box-sizing: border-box;
+            -moz-box-sizing: border-box;
+        }
+        #sycBoxMenuClose {
+            position: absolute;
+            top: 0;
+            right: 0;
+            padding: 1px 4px 0 0;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .sycBoxMenuFooter {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            padding: 2px;
+            text-align: right;
+            font-size: 10px;
+        }
+        .sycBoxMenuFooter > #sycBoxMenuFooterLeft {
+            position: absolute;
+            bottom: 0;
+            text-align: left;
+        }
+        a:link.sycBox {
+            text-decoration: none;
+        }
+        a:visited.sycBox {
+            text-decoration: none;
+        }
+        a:hover.sycBox {
+            text-decoration: none;
+        }
+        a:active.sycBox {
+            text-decoration: none;
+        }`
     );
 })(jQuery);
