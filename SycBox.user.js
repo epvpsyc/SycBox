@@ -255,6 +255,7 @@
             ['heh.png', ':heh:'],            
             ['jofrly.png', ':jofrly:'],            
             ['wat.png', ':wat:'],
+            ['rollsafe.png', ':rollsafe:'],
         ];
 
         smileys.forEach(function (smiley, i) {
