@@ -252,8 +252,8 @@
             ['babyrage.png', ':babyrage:'],
             ['kreygasm.png', ':kreygasm:'],
             ['feelsgoodman.png', ':feelsgoodman:'],
-            ['heh.png', ':heh:'],            
-            ['jofrly.png', ':jofrly:'],            
+            ['heh.png', ':heh:'],
+            ['jofrly.png', ':jofrly:'],
             ['wat.png', ':wat:'],
             ['rollsafe.png', ':rollsafe:'],
         ];
@@ -493,8 +493,8 @@
         }
     }, 5000);
 
-    appendStyleRaw(
-        `.sycBoxTitle {
+    appendStyleRaw(`
+        .sycBoxTitle {
             padding: 4px;
             color: white;
             background: #1c1e20;
@@ -612,6 +612,6 @@
         }
         a:active.sycBox {
             text-decoration: none;
-        }`
-    );
+        }
+    `);
 })(jQuery);
