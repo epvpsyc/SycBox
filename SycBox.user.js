@@ -4,7 +4,7 @@
 // @description customized ShoutBox
 // @include     *//www.elitepvpers.com/forum/
 // @author      Syc
-// @version     1.1.1
+// @version     1.1.2
 // @downloadURL https://github.com/epvpsyc/SycBox/raw/master/SycBox.user.js
 // @updateURL   https://github.com/epvpsyc/SycBox/raw/master/SycBox.user.js
 // @grant       none
@@ -161,6 +161,8 @@
             $sycBoxTable.animate({
                 scrollTop: $sycBoxTable.prop('scrollHeight')
             });
+
+            optimizeYoutubeIcon();
         }
     }
 
@@ -342,8 +344,8 @@
 
     function checkForMention(line) {
         if ($($.parseHTML(line.text)).text().includes('@' + getUserName())) {
-            console.log('initial', initialLoad);
-            console.log('refresh', refreshActive);
+            // console.log('initial', initialLoad);
+            // console.log('refresh', refreshActive);
             if (!initialLoad && settings.showNotifications) {
                 createNotification(line.user.name, line.text.trim());
             }
@@ -430,13 +432,55 @@
         $('#sycBoxSend').css('font-size', settings.fontSize + 'px');
     }
 
+    function optimizeYoutubeIcon() {
+        let $sycBoxTable = $('#sycBoxTable');
+        $sycBoxTable.find('tr > td:nth-child(3) > span > img[src="https://youtube.com/favicon.ico"].sb-img.fancybox-disabled').each(function() {
+            let $image = $(this);
+            $image.removeClass();
+            $image.addClass('inlineimg');
+            $image.attr('height', parseInt(getStorage('fontSize')) + 1);
+        });
+    }
+
+    async function replaceYoutubeUrls(string) {
+        let words = string.split(' ');
+
+        let newText = '';
+        for (let i = 0; i < words.length; i++) {
+            let word = words[i];
+            if (/^(https?\:\/\/)?(www\.youtube\.com|youtu\.?be)\/.+$/.test(word)) {
+                word = await formatYoutubeUrl(word);
+            }
+            newText += (i < words.length - 1) ? word + ' ' : word;
+        }
+        return newText;
+    }
+
+    async function formatYoutubeUrl(url) {
+        return new Promise(resolve => {
+            $.getJSON('https://noembed.com/embed',
+                {format: 'json', url: url}, function (data) {
+                    if (data.title) {
+                        let text = '[IMGLINK]https://youtube.com/favicon.ico[/IMGLINK][URL=' + url + ']' + data.title + '[/URL]';
+                        resolve(text)
+                    } else {
+                        resolve(url);
+                    }
+                });
+        });
+    }
+
     updateSettings();
     initTable();
 
     $('#sycBoxSend').keypress(function (e) {
         if (e.which === 13) {
-            sendMessage($(this).val());
-            $(this).val('');
+            let text = $(this).val();
+            replaceYoutubeUrls(text).then(newText => {
+                text = newText;
+                sendMessage(text);
+                $(this).val('');
+            });
         }
     });
 
