@@ -161,8 +161,6 @@
             $sycBoxTable.animate({
                 scrollTop: $sycBoxTable.prop('scrollHeight')
             });
-
-            optimizeYoutubeIcon();
         }
     }
 
@@ -432,16 +430,6 @@
         $('#sycBoxSend').css('font-size', settings.fontSize + 'px');
     }
 
-    function optimizeYoutubeIcon() {
-        let $sycBoxTable = $('#sycBoxTable');
-        $sycBoxTable.find('tr > td:nth-child(3) > img[src="https://youtube.com/favicon.ico"].sb-img.fancybox-disabled').each(function() {
-            let $image = $(this);
-            $image.removeClass();
-            $image.addClass('inlineimg');
-            $image.attr('height', parseInt(getStorage('fontSize')) + 1);
-        });
-    }
-
     async function replaceYoutubeUrls(string) {
         let words = string.split(' ');
 
@@ -461,7 +449,7 @@
             $.getJSON('https://noembed.com/embed',
                 {format: 'json', url: url}, function (data) {
                     if (data.title) {
-                        let text = '[IMGLINK]https://youtube.com/favicon.ico[/IMGLINK][URL=' + url + ']' + data.title + '[/URL]';
+                        let text = '[URL=' + url + ']' + data.title + '[/URL]';
                         resolve(text)
                     } else {
                         resolve(url);
