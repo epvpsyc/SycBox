@@ -4,7 +4,7 @@
 // @description customized ShoutBox
 // @include     *//www.elitepvpers.com/forum/
 // @author      Syc
-// @version     1.1.3
+// @version     1.1.4
 // @downloadURL https://github.com/epvpsyc/SycBox/raw/master/SycBox.user.js
 // @updateURL   https://github.com/epvpsyc/SycBox/raw/master/SycBox.user.js
 // @grant       none
@@ -185,10 +185,10 @@
             '<input type="checkbox" data-sycbox-id="removeSmileys" class="sycBoxSetToggle"' + removeSmileysHtml + '>' +
             'Remove smiley images' +
             '</label>' +
-            '<label>' +
-            '<input type="checkbox" data-sycbox-id="useEnglishChannel" class="sycBoxSetToggle"' + useEnglishChannelHtml + '>' +
-            'Use english channel' +
-            '</label>' +
+            // '<label>' +
+            // '<input type="checkbox" data-sycbox-id="useEnglishChannel" class="sycBoxSetToggle"' + useEnglishChannelHtml + '>' +
+            // 'Use english channel' +
+            // '</label>' +
             '<label>' +
             '<input type="checkbox" data-sycbox-id="highlightMentions" class="sycBoxSetToggle"' + showMentionHighlight + '>' +
             'Highlight row when mentioned (@' + getUserName() + ')' +
