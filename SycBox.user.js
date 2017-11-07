@@ -4,7 +4,7 @@
 // @description customized ShoutBox
 // @include     *//www.elitepvpers.com/forum/
 // @author      Syc
-// @version     1.1.2
+// @version     1.1.3
 // @downloadURL https://github.com/epvpsyc/SycBox/raw/master/SycBox.user.js
 // @updateURL   https://github.com/epvpsyc/SycBox/raw/master/SycBox.user.js
 // @grant       none
@@ -434,7 +434,7 @@
 
     function optimizeYoutubeIcon() {
         let $sycBoxTable = $('#sycBoxTable');
-        $sycBoxTable.find('tr > td:nth-child(3) > span > img[src="https://youtube.com/favicon.ico"].sb-img.fancybox-disabled').each(function() {
+        $sycBoxTable.find('tr > td:nth-child(3) > img[src="https://youtube.com/favicon.ico"].sb-img.fancybox-disabled').each(function() {
             let $image = $(this);
             $image.removeClass();
             $image.addClass('inlineimg');
