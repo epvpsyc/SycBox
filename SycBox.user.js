@@ -4,7 +4,7 @@
 // @description customized ShoutBox
 // @include     *//www.elitepvpers.com/forum/
 // @author      Syc
-// @version     1.1.4
+// @version     1.1.5
 // @downloadURL https://github.com/epvpsyc/SycBox/raw/master/SycBox.user.js
 // @updateURL   https://github.com/epvpsyc/SycBox/raw/master/SycBox.user.js
 // @grant       none
@@ -172,6 +172,7 @@
     function initMenu() {
         let removeSmileysHtml = (settings.removeSmileys) ? 'checked' : '';
         let useEnglishChannelHtml = (settings.useEnglishChannel) ? 'checked' : '';
+        let maskUrls = (settings.maskUrls) ? 'checked' : '';
         let showNotifications = (settings.showNotifications) ? 'checked' : '';
         let showMentionHighlight = (settings.highlightMentions) ? 'checked' : '';
 
@@ -189,6 +190,10 @@
             // '<input type="checkbox" data-sycbox-id="useEnglishChannel" class="sycBoxSetToggle"' + useEnglishChannelHtml + '>' +
             // 'Use english channel' +
             // '</label>' +
+            '<label>' +
+            '<input type="checkbox" data-sycbox-id="useEnglishChannel" class="sycBoxSetToggle"' + maskUrls + '>' +
+            'Mask elitepvpers and youtube URLs' +
+            '</label>' +
             '<label>' +
             '<input type="checkbox" data-sycbox-id="highlightMentions" class="sycBoxSetToggle"' + showMentionHighlight + '>' +
             'Highlight row when mentioned (@' + getUserName() + ')' +
@@ -387,6 +392,7 @@
         const settingsDefault = {
             'removeSmileys': true,
             'useEnglishChannel': false,
+            'maskUrls': true,
             'showMentionHighlight': false,
             'showNotifications': false,
             'fontSize': '11',
@@ -417,6 +423,7 @@
         settings = {
             'removeSmileys': getStorage('removeSmileys'),
             'useEnglishChannel': getStorage('useEnglishChannel'),
+            'maskUrls': getStorage('maskUrls'),
             "highlightMentions": getStorage('highlightMentions'),
             'showNotifications': getStorage('showNotifications'),
             'fontSize': getStorage('fontSize'),
@@ -430,26 +437,16 @@
         $('#sycBoxSend').css('font-size', settings.fontSize + 'px');
     }
 
-    async function replaceYoutubeUrls(string) {
-        let words = string.split(' ');
-
-        let newText = '';
-        for (let i = 0; i < words.length; i++) {
-            let word = words[i];
-            if (/^(https?\:\/\/)?(www\.youtube\.com|youtu\.?be)\/.+$/.test(word)) {
-                word = await formatYoutubeUrl(word);
-            }
-            newText += (i < words.length - 1) ? word + ' ' : word;
-        }
-        return newText;
-    }
-
-    async function formatYoutubeUrl(url) {
+    function formatYoutubeUrl(url) {
         return new Promise(resolve => {
             $.getJSON('https://noembed.com/embed',
-                {format: 'json', url: url}, function (data) {
+                {
+                    format: 'json',
+                    url: url
+                },
+                data => {
                     if (data.title) {
-                        let text = '[URL=' + url + ']' + data.title + '[/URL]';
+                        let text = '[URL=' + url + ']' + data.title + ' (Youtube)[/URL]';
                         resolve(text)
                     } else {
                         resolve(url);
@@ -458,17 +455,62 @@
         });
     }
 
+    function formatElitepvpersUrl(url) {
+        return new Promise(resolve => {
+            $.ajax({
+                url: url,
+                cache: false
+            }).done(html => {
+                if (!html) {
+                    resolve(url);
+                    return;
+                }
+
+                let title = html.match("<title>(.*?)</title>")[1];
+                if (title) {
+                    let text = '[URL=' + url + ']' + title + ' (Elitepvpers)[/URL]';
+                    resolve(text);
+                } else {
+                    resolve(url);
+                }
+            });
+        });
+    }
+
+    async function checkForReplaceAbleUrls(string) {
+        let words = string.split(' ');
+
+        let newText = '';
+        for (let i = 0; i < words.length; i++) {
+            let word = words[i];
+            if (/^(https?:\/\/)?(www\.youtube\.com|youtu\.?be)\/.+$/.test(word)) {
+                word = await formatYoutubeUrl(word);
+            }
+            if (/^(https?:\/\/)www\.elitepvpers\.com\/.+$/.test(word)) {
+                word = await formatElitepvpersUrl(word);
+            }
+            newText += (i < words.length - 1) ? word + ' ' : word;
+        }
+        return (newText);
+    }
+
     updateSettings();
     initTable();
 
     $('#sycBoxSend').keypress(function (e) {
         if (e.which === 13) {
             let text = $(this).val();
-            replaceYoutubeUrls(text).then(newText => {
-                text = newText;
+            $(this).val('');
+
+            if (settings.maskUrls) {
+                checkForReplaceAbleUrls(text).then(newText => {
+                    text = newText;
+                    sendMessage(text);
+                });
+            } else {
                 sendMessage(text);
-                $(this).val('');
-            });
+            }
+
         }
     });
 
