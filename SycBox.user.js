@@ -4,7 +4,7 @@
 // @description customized ShoutBox
 // @include     *//www.elitepvpers.com/forum/
 // @author      Syc
-// @version     1.1.5
+// @version     1.1.6
 // @downloadURL https://github.com/epvpsyc/SycBox/raw/master/SycBox.user.js
 // @updateURL   https://github.com/epvpsyc/SycBox/raw/master/SycBox.user.js
 // @grant       none
@@ -137,12 +137,14 @@
 
                 let line = (!checkForMention(chat)) ? '<tr>' : '<tr style="background-color: #ADD8E6;">';
 
+                let username = (chat.user.name.length >= getStorage('cutLength')) ? chat.user.name.substr(0, parseInt(getStorage('cutLength')) - 3) + '...' : chat.user.name;
+
                 line +=
                     '<td><span title="' + timetitle + '" class="sycBoxTime" data-sycbox-id="' + chat.id + '">' +
                     chat.time +
                     '</span></td>' +
                     '<td><a class="sycBox" style="color:' + chat.user.color + ';" target="_blank" href="' + chat.user.url + '">' +
-                    chat.user.name +
+                    username +
                     '</a></td>' +
                     messageHTML +
                     '</tr>';
@@ -205,6 +207,10 @@
             '<label>' +
             '<input type="number" data-sycbox-id="fontSize" class="sycBoxSetInput"  min="7" max="99" value="' + settings.fontSize + '" />' +
             ' px Font Size' +
+            '</label>' +
+            '<label>' +
+            '<input type="number" data-sycbox-id="cutLength" class="sycBoxSetInput"  min="4" max="99" value="' + settings.cutLength + '" />' +
+            ' Number of Characters needed to cut Usernames' +
             '</label>' +
             '</div>' +
             '<div class="sycBoxMenuFooter">' +
@@ -396,6 +402,7 @@
             'showMentionHighlight': false,
             'showNotifications': false,
             'fontSize': '11',
+            'cutLength': '15',
         };
 
         let prefix = 'sycBox_';
@@ -427,6 +434,7 @@
             "highlightMentions": getStorage('highlightMentions'),
             'showNotifications': getStorage('showNotifications'),
             'fontSize': getStorage('fontSize'),
+            'cutLength': getStorage('cutLength'),
         };
 
         applyCustomStyle();
