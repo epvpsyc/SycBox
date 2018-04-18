@@ -4,7 +4,7 @@
 // @description customized ShoutBox
 // @include     *//www.elitepvpers.com/forum/
 // @author      Syc
-// @version     1.1.6
+// @version     1.1.7
 // @downloadURL https://github.com/epvpsyc/SycBox/raw/master/SycBox.user.js
 // @updateURL   https://github.com/epvpsyc/SycBox/raw/master/SycBox.user.js
 // @grant       none
@@ -624,6 +624,7 @@
             cursor: pointer;
         }
         #sycBoxMenu {
+            z-index: 3;
             position: absolute;
             top: 20%;
             left: 50%;
