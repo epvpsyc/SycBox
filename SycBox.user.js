@@ -4,7 +4,7 @@
 // @description customized ShoutBox
 // @include     *//www.elitepvpers.com/forum/
 // @author      Syc
-// @version     1.1.7
+// @version     1.1.8
 // @downloadURL https://github.com/epvpsyc/SycBox/raw/master/SycBox.user.js
 // @updateURL   https://github.com/epvpsyc/SycBox/raw/master/SycBox.user.js
 // @grant       none
@@ -193,7 +193,7 @@
             // 'Use english channel' +
             // '</label>' +
             '<label>' +
-            '<input type="checkbox" data-sycbox-id="useEnglishChannel" class="sycBoxSetToggle"' + maskUrls + '>' +
+            '<input type="checkbox" data-sycbox-id="maskUrls" class="sycBoxSetToggle"' + maskUrls + '>' +
             'Mask elitepvpers and youtube URLs' +
             '</label>' +
             '<label>' +
